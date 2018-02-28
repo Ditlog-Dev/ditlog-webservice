@@ -26,4 +26,7 @@ repositories {
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+
+	compile group: 'com.zaxxer', name: 'HikariCP', version: '2.7.6'
+	compile group: 'org.hibernate', name: 'hibernate-gradle-plugin', version: '5.2.13.Final'
 }
