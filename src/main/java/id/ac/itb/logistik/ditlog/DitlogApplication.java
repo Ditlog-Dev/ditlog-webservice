@@ -11,10 +11,12 @@ public class DitlogApplication {
 
 	@RequestMapping("/")
 	public String home() {
-			return "Hello Docker Worldsss";
+			return "Hello Docker World";
 	}
 
 	public static void main(String[] args) {
+		Integer a = null;
+		System.out.printf(a.toString());
 		SpringApplication.run(DitlogApplication.class, args);
 	}
 }
