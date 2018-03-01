@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+docker-compose up -d && \
+docker-compose exec app sh ./gradlew --status &&
+branch=$(git branch | grep -e "^*" | cut -d' ' -f 2)
+echo "
+===================== 🚀 Done 🚀 ===================
+      Created by DitLog Performance
+      branch : $branch
+      Access your new links:
+      🌎 Web server: http://localhost:8080/
+===================== 🚀 Done 🚀 ===================" &&
+docker-compose exec app sh ./gradlew build -t
