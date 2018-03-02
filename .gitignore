@@ -25,5 +25,10 @@ dist/
 nbdist/
 .nb-gradle/
 
+<<<<<<< HEAD
 ### Mac file ###
 .DS_Store
+=======
+libs/
+*.properties
+>>>>>>> 13deff154228efa83b7dbb0e5e84f10238a3c327

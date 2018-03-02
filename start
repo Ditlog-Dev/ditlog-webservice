@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 docker-compose up -d && \
-docker-compose exec app sh ./gradlew --status &&
+docker-compose exec app sh ./gradlew --status && \
 branch=$(git branch | grep -e "^*" | cut -d' ' -f 2)
 echo "
 ===================== 🚀 Done 🚀 ===================
@@ -8,5 +8,9 @@ echo "
       branch : $branch
       Access your new links:
       🌎 Web server: http://localhost:8080/
-===================== 🚀 Done 🚀 ===================" &&
-docker-compose exec app sh ./gradlew bootRun
+===================== 🚀 Done 🚀 ===================" && \
+if [ "$1" != "background" ]; then
+  docker-compose exec app sh ./gradlew bootRun
+else
+  docker-compose exec -d -T app sh ./gradlew bootRun
+fi
