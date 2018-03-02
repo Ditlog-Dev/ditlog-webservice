@@ -1,6 +1,7 @@
 .gradle
 /build/
 !gradle/wrapper/gradle-wrapper.jar
+/out/
 
 ### STS ###
 .apt_generated
@@ -23,3 +24,6 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+### Mac file ###
+.DS_Store
