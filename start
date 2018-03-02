@@ -9,4 +9,4 @@ echo "
       Access your new links:
       🌎 Web server: http://localhost:8080/
 ===================== 🚀 Done 🚀 ===================" &&
-docker-compose exec app sh ./gradlew build -t
+docker-compose exec app sh ./gradlew bootRun
