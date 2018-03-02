@@ -4,6 +4,12 @@ This repository contains the backend/REST API server of the DitLog Project.
 
 ---
 
+## Installation
+1. Open IntelliJ IDEA Ultimate
+2. Import this repo
+3. Configure database connection. Change `application.properties.sample` to `application.properties` and configure credential
+4. Download `oracle7.jar` from oracle, and put it on folder `libs/`
+
 ## Running using Docker in development
 
 Prerequisites: [Docker Engine](https://docs.docker.com/engine/installation/) and [Docker Compose](https://docs.docker.com/compose/install/) __must be installed__;
