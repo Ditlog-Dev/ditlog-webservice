@@ -14,11 +14,13 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   - docker-compose --version
-  - docker-compose build
-  - docker ps
 
 before_script:
   - chmod +x init
+  - chmod +x start
+  - chmod +x test
 
 script:
   - ./init
+  - ./start background
+  - ./test
