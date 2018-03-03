@@ -1,6 +1,5 @@
 package id.ac.itb.logistik.ditlog.model;
 
-
 import javax.persistence.*;
 
 @Entity
@@ -10,7 +9,7 @@ public class User {
     @Id
     @GeneratedValue
     @Column(name = "ID_USER")
-    Long id_user;
+    Long idUser;
 
     @Column(name = "USER_NAME")
     String username;
@@ -19,25 +18,28 @@ public class User {
     String password;
 
     @Column(name = "ID_EMPLOYEES")
-    Long id_employee;
+    Long idEmployee;
 
     @Column(name = "EMAIL")
     String email;
+
+    public User() {
+    }
 
     public String getUsername() {
         return username;
     }
 
-    public Long getId_user() {
-        return id_user;
+    public Long getIdUser() {
+        return idUser;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public Long getId_employee() {
-        return id_employee;
+    public Long getIdEmployee() {
+        return idEmployee;
     }
 
     public String getEmail() {
@@ -48,8 +50,8 @@ public class User {
         this.username = username;
     }
 
-    public void setId_user(Long id_user) {
-        this.id_user = id_user;
+    public void setIdUser(Long id_user) {
+        this.idUser = id_user;
     }
 
     public void setPassword(String password) {
@@ -60,7 +62,7 @@ public class User {
         this.email = email;
     }
 
-    public void setId_employee(Long id_employee) {
-        this.id_employee = id_employee;
+    public void setIdEmployee(Long id_employee) {
+        this.idEmployee = id_employee;
     }
 }
