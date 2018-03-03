@@ -1,6 +1,5 @@
 package id.ac.itb.logistik.ditlog.controller;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import id.ac.itb.logistik.ditlog.model.BaseResponse;
 import id.ac.itb.logistik.ditlog.model.User;
 import id.ac.itb.logistik.ditlog.model.UserPayload;
@@ -12,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.constraints.Null;
-import java.util.List;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 @RestController
 public class UserController {
@@ -34,10 +33,14 @@ public class UserController {
             baseResponse.setPayload("Wrong username/password");
         }
         else {
-            baseResponse.setCode(200);
-            baseResponse.setPayload(new UserPayload(result.getIdUser(), "m2kd2kmd1"));
-        }
+            String jwtToken = Jwts.builder()
+                    .setSubject(user.getUsername())
+                    .claim("roles", "user")
+                    .signWith(SignatureAlgorithm.HS256, "secretkey").compact();
 
+            baseResponse.setCode(200);
+            baseResponse.setPayload(new UserPayload(result.getIdUser(), jwtToken));
+        }
 
         return ResponseEntity.ok(baseResponse);
     }
