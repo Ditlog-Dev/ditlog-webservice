@@ -15,10 +15,10 @@ public class IndicatorRepository {
 
     public IndicatorRepository() {
         this.indicators = new ArrayList<>();
-        for(int i=1; i<10; i++){
+        for (int i = 1; i < 10; i++) {
             Indicator indicator = new Indicator();
             indicator.setId((long) i);
-            indicator.setName("Indicator "+String.valueOf(i));
+            indicator.setName("Indicator " + String.valueOf(i));
             this.indicators.add(indicator);
         }
     }
