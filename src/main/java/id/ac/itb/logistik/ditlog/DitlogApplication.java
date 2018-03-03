@@ -12,7 +12,6 @@ import java.util.TimeZone;
 @RestController
 public class DitlogApplication {
 
-
 	@GetMapping("/")
 	public String init(){
 		return "Web Service Ditlog API";
