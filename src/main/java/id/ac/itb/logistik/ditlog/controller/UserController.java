@@ -3,6 +3,7 @@ package id.ac.itb.logistik.ditlog.controller;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import id.ac.itb.logistik.ditlog.model.BaseResponse;
 import id.ac.itb.logistik.ditlog.model.User;
+import id.ac.itb.logistik.ditlog.model.UserPayload;
 import id.ac.itb.logistik.ditlog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,16 +28,17 @@ public class UserController {
 
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setStatus(true);
-        int statCode;
+
         if (result == null) {
-            statCode = 400;
+            baseResponse.setCode(400);
+            baseResponse.setPayload("Wrong username/password");
         }
         else {
-            statCode = 200;
+            baseResponse.setCode(200);
+            baseResponse.setPayload(new UserPayload(result.getIdUser(), "m2kd2kmd1"));
         }
 
-        baseResponse.setCode(statCode);
-        baseResponse.setPayload(result.getIdUser());
+
         return ResponseEntity.ok(baseResponse);
     }
 }
