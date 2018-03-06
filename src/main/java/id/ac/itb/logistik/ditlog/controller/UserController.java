@@ -21,8 +21,6 @@ public class UserController {
 
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     public ResponseEntity<BaseResponse> loginUser(@RequestBody User user){
-        System.out.println(user.getUsername() + " " + user.getPassword());
-
         User result = userRepo.findUserByUsernamePassword(user.getUsername(), user.getPassword());
 
         BaseResponse baseResponse = new BaseResponse();

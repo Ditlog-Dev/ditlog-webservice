@@ -4,8 +4,8 @@ public class UserPayload {
     public Long idUser;
     public String jwtToken;
 
-    public UserPayload(Long idUser, String jwtTOken) {
+    public UserPayload(Long idUser, String jwtToken) {
         this.idUser = idUser;
-        this.jwtToken = jwtTOken;
+        this.jwtToken = jwtToken;
     }
 }

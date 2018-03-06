@@ -14,6 +14,7 @@ import java.util.TimeZone;
 @RestController
 public class DitlogApplication {
 
+	/*
 	@Bean
 	public FilterRegistrationBean jwtFilter() {
 		final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
@@ -21,7 +22,7 @@ public class DitlogApplication {
 		registrationBean.addUrlPatterns("/");
 
 		return registrationBean;
-	}
+	}*/
 
 	@GetMapping("/")
 	public String init(){
