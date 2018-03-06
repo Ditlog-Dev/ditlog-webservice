@@ -1,2 +1,5 @@
 #!/usr/bin/env bash
+mkdir -p libs &&
+wget -N "https://www.dropbox.com/s/1u0yiqd0uiei6vu/ojdbc7.jar?dl=1" -O libs/ojdbc7.jar &&
+cp -fr test.properties.sample src/test/resources/application.properties &&
 docker-compose build

@@ -1,6 +1,8 @@
 package id.ac.itb.logistik.ditlog.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -16,11 +18,13 @@ public class Indicator {
     @Column(name = "NAMA_INDIKATOR")
     String name;
 
+    @JsonIgnore
     @Column(name = "TGL_BUAT")
-    Date dateCreated;
+    Date dateCreated = new Date();
 
+    @JsonIgnore
     @Column(name = "TGL_UPDATE")
-    Date dateModified;
+    Date dateModified = new Date();
 
     @Column(name = "ID_USER")
     Long idUser;
