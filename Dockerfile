@@ -20,4 +20,4 @@ EXPOSE 8080 35729
 
 RUN ./gradlew build
 
-CMD [ "./gradlew", "bootRun" ]
+CMD [ "./gradlew", "build", "-t" ]

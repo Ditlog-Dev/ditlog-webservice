@@ -17,8 +17,6 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/opt/ditlog-webservice
-      - app_build:/opt/ditlog-webservice/build/
-      - app_out:/opt/ditlog-webservice/out/
     ports:
       - "8080"
       - "35729:35729"
