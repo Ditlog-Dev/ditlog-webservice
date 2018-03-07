@@ -41,11 +41,8 @@ public class IndicatorController {
   }
 
   @PostMapping("/indicators")
-  public ResponseEntity<BaseResponse> addIndicator(@RequestBody Map<String, Object> payload) {
+  public ResponseEntity<BaseResponse> addIndicator(@RequestBody Indicator indicator) {
     BaseResponse baseResponse = new BaseResponse();
-
-    final ObjectMapper mapper = new ObjectMapper();
-    final Indicator indicator = mapper.convertValue(payload, Indicator.class);
 
     if(indicatorRepository.save(indicator) != null) {
       baseResponse.setStatus(true);
