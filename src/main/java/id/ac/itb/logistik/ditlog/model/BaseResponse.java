@@ -1,40 +1,41 @@
 package id.ac.itb.logistik.ditlog.model;
 
 public class BaseResponse {
-    Boolean status;
-    Integer code;
-    String message;
-    Object payload;
 
-    public Boolean getStatus() {
-        return status;
-    }
+  Boolean status;
+  Integer code;
+  String message;
+  Object payload;
 
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
+  public Boolean getStatus() {
+    return status;
+  }
 
-    public Integer getCode() {
-        return code;
-    }
+  public void setStatus(Boolean status) {
+    this.status = status;
+  }
 
-    public void setCode(Integer code) {
-        this.code = code;
-    }
+  public Integer getCode() {
+    return code;
+  }
 
-    public String getMessage() {
-        return message;
-    }
+  public void setCode(Integer code) {
+    this.code = code;
+  }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+  public String getMessage() {
+    return message;
+  }
 
-    public Object getPayload() {
-        return payload;
-    }
+  public void setMessage(String message) {
+    this.message = message;
+  }
 
-    public void setPayload(Object payload) {
-        this.payload = payload;
-    }
+  public Object getPayload() {
+    return payload;
+  }
+
+  public void setPayload(Object payload) {
+    this.payload = payload;
+  }
 }
