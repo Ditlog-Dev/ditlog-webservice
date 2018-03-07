@@ -34,27 +34,28 @@ public class DitlogUserServiceTests {
 
     private HttpHeaders headers = new HttpHeaders();
 
-    private User testUser;
+    private static User testUser;
+
+    private static boolean setUpIsDone = false;
 
     @Before
     public void setUp() {
+        if (setUpIsDone) {
+            return;
+        }
         testUser = new User();
         testUser.setUsername("john");
         testUser.setPassword(MD5Encrypt("456"));
-        testUser.setIdUser(2L);
-        testUser.setEmail("aep@doe.com");
-        testUser.setIdEmployee(2L);
+        testUser.setIdUser(1L);
         userRepo.save(testUser);
+
+        setUpIsDone = true;
     }
 
 
     @Test
     public void whenPostCorrectAuth_thenOK() {
-        User user = new User();
-        user.setUsername(testUser.getUsername());
-        user.setPassword(MD5Encrypt(testUser.getPassword()));
-
-        ResponseEntity<String> response = getStringResponseEntity(user);
+        ResponseEntity<String> response = getStringResponseEntity(testUser);
 
         JSONObject responseJson;
         try {
@@ -68,11 +69,7 @@ public class DitlogUserServiceTests {
 
     @Test
     public void whenPostCorrectAuth_thenGetCorrectId() {
-        User user = new User();
-        user.setUsername(testUser.getUsername());
-        user.setPassword(MD5Encrypt(testUser.getPassword()));
-
-        ResponseEntity<String> response = getStringResponseEntity(user);
+        ResponseEntity<String> response = getStringResponseEntity(testUser);
 
         JSONObject responseJson;
         try {
@@ -84,7 +81,7 @@ public class DitlogUserServiceTests {
             } else {
                 actualIdUser = -1;
             }
-            Assert.assertEquals(2L,actualIdUser);
+            Assert.assertEquals((long)testUser.getIdUser(),actualIdUser);
         } catch (JSONException e) {
             e.printStackTrace();
             Assert.fail();
@@ -93,14 +90,10 @@ public class DitlogUserServiceTests {
 
     @Test
     public void whenPostCorrectAuth_thenGetCorrectJwtToken() {
-        User user = new User();
-        user.setUsername(testUser.getUsername());
-        user.setPassword(MD5Encrypt(testUser.getPassword()));
-
-        ResponseEntity<String> response = getStringResponseEntity(user);
+        ResponseEntity<String> response = getStringResponseEntity(testUser);
 
         String expectedJwtToken = Jwts.builder()
-                .setSubject(user.getUsername())
+                .setSubject(testUser.getUsername())
                 .claim("roles", "user")
                 .signWith(SignatureAlgorithm.HS256, "secretkey").compact();
 
@@ -123,11 +116,11 @@ public class DitlogUserServiceTests {
 
     @Test
     public void whenPostWrongAuth_thenError() {
-        User user = new User();
-        user.setUsername("zzzzzzzzzz");
-        user.setPassword("zzzzzzzzzz");
+        User wrongUser = new User();
+        wrongUser.setUsername("zzzzzzzzzz");
+        wrongUser.setPassword("zzzzzzzzzz");
 
-        ResponseEntity<String> response = getStringResponseEntity(user);
+        ResponseEntity<String> response = getStringResponseEntity(wrongUser);
 
         JSONObject responseJson;
         try {
