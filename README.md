@@ -1,7 +1,18 @@
-# Ditlog Web Service
-[![Build Status](https://api.travis-ci.org/Ditlog-Dev/ditlog-webservice.svg)](https://travis-ci.org/Ditlog-Dev/ditlog-webservice)
+<h1 align="center">
+  <br>
+  Ditlog Web Service
+  <br>
+  <br>
+</h1>
 
+<p align="center">
+  <a href="https://travis-ci.org/Ditlog-Dev/ditlog-webservice"><img src="https://api.travis-ci.org/Ditlog-Dev/ditlog-webservice.svg?branch=master" alt="travis"></a>
+  <a href="http://checkstyle.sourceforge.net/google_style.html"><img src="https://img.shields.io/badge/code--style-google-blue.svg" alt="Checkstyle - Google Java Style Guide"></a>
+</p>
+
+<p align="center">
 This repository contains the backend/REST API server of the DitLog Project.
+</p>
 
 ---
 
@@ -36,6 +47,18 @@ Internet access for pulling gradle dependencies and Docker images.
 
 - If the Dockerfile is modified, you will need to rebuild the Docker images by removing the containers and running `./init` again.
 
+- Using pagination
+```
+/indicators?page=W&limit=X&dir=Y&sort=Z
+    
+W = page number (positive number >= 0, default = 0)
+X = item limit per page (positive number >= 1, default = 5)
+Y = direction (asc or desc, default=asc)
+Z = sorting key (check JSON structure. in indicator, default = id) 
+```
+
+---
+
 ## Keynote
 
 ### Features
@@ -44,3 +67,7 @@ Internet access for pulling gradle dependencies and Docker images.
 - In DB testing using H2
 
 ### To Do
+
+---
+
+## Contributors
