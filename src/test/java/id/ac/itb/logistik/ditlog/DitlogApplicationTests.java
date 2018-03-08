@@ -20,5 +20,4 @@ public class DitlogApplicationTests {
     String body = this.restTemplate.getForObject("/", String.class);
     Assert.assertEquals(body, "Web Service Ditlog API");
   }
-
 }

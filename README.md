@@ -1,4 +1,5 @@
 # Ditlog Web Service
+[![Build Status](https://api.travis-ci.org/Ditlog-Dev/ditlog-webservice.svg)](https://travis-ci.org/Ditlog-Dev/ditlog-webservice)
 
 This repository contains the backend/REST API server of the DitLog Project.
 
@@ -8,7 +9,7 @@ This repository contains the backend/REST API server of the DitLog Project.
 1. Open IntelliJ IDEA Ultimate
 2. Import this repo
 3. Configure database connection. Change `application.properties.sample` to `application.properties` and configure credential
-4. Download `oracle7.jar` from oracle, and put it on folder `libs/`
+4. Download `odbc7.jar` from oracle, and put it on folder `libs/`
 
 ## Running using Docker in development
 
@@ -40,7 +41,6 @@ Internet access for pulling gradle dependencies and Docker images.
 ### Features
 - This project support live reloading if you modify the apps. To add the live reloading you must install [RemoteLiveReload](https://chrome.google.com/webstore/detail/remotelivereload/jlppknnillhjgiengoigajegdpieppei?hl=en-GB) Extension on Google Chrome. If you do not want to install, then you must refresh your browser manually
 
+- In DB testing using H2
+
 ### To Do
-- Add Oracle DB
-- Add testing unit (JUnit)
-- Add Continous Integration (Jenkins or CI)
