@@ -19,12 +19,18 @@ services:
       - .:/opt/ditlog-webservice
       - app_build:/opt/ditlog-webservice/build/
       - app_out:/opt/ditlog-webservice/out/
+      - app_report_xml:/opt/ditlog-webservice/build/test-results
+      - app_report_html:/opt/ditlog-webservice/build/reports
     ports:
       - "8080"
       - "35729:35729"
 
 volumes:
   app_build:
+    driver: local
+  app_report_html:
+    driver: local
+  app_report_xml:
     driver: local
   app_out:
     driver: local
