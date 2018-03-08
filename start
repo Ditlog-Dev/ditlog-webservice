@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 docker-compose up -d && \
-docker-compose exec app sh ./gradlew --status && \
+docker-compose exec app gradle --status && \
 branch=$(git branch | grep -e "^*" | cut -d' ' -f 2)
 echo "
 ===================== 🚀 Done 🚀 ===================
@@ -10,7 +10,7 @@ echo "
       🌎 Web server: http://localhost:8080/
 ===================== 🚀 Done 🚀 ===================" && \
 if [ "$1" != "background" ]; then
-  docker-compose exec app sh ./gradlew bootRun
+  docker-compose exec app gradle bootRun
 else
-  docker-compose exec -d -T app sh ./gradlew bootRun
+  docker-compose exec -d -T app gradle bootRun
 fi
