@@ -1,7 +1,6 @@
 package id.ac.itb.logistik.ditlog.model;
 
 public class BaseResponse {
-
   Boolean status;
   Integer code;
   String message;

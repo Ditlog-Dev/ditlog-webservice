@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 docker-compose up -d &&
-docker-compose exec app sh ./gradlew test --stacktrace
+docker-compose exec app gradle test --stacktrace
