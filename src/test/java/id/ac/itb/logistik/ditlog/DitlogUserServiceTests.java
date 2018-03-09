@@ -25,18 +25,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class DitlogUserServiceTests {
-
-  @Autowired
-  private TestRestTemplate restTemplate;
+public class DitlogUserServiceTests extends BaseTest {
 
   @Autowired
   UserRepository userRepo;
-
-  @LocalServerPort
-  private int port;
-
-  private HttpHeaders headers = new HttpHeaders();
 
   private static User testUser;
 
@@ -161,9 +153,5 @@ public class DitlogUserServiceTests {
       e.printStackTrace();
     }
     return null;
-  }
-
-  private String createURLWithPort(String uri) {
-    return "http://localhost:" + port + uri;
   }
 }
