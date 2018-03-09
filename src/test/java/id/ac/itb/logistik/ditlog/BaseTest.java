@@ -9,9 +9,12 @@ import org.springframework.http.HttpHeaders;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class BaseTest {
-  @Autowired protected TestRestTemplate restTemplate;
 
-  @LocalServerPort protected int port;
+  @Autowired
+  protected TestRestTemplate restTemplate;
+
+  @LocalServerPort
+  protected int port;
 
   protected HttpHeaders headers = new HttpHeaders();
 

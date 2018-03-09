@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class IndicatorController {
-  @Autowired IndicatorRepository indicatorRepository;
+
+  @Autowired
+  IndicatorRepository indicatorRepository;
 
   @GetMapping("/indicators")
   public ResponseEntity<BaseResponse> getAll(

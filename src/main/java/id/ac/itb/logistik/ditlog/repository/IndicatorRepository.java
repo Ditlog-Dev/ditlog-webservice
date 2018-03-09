@@ -5,4 +5,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IndicatorRepository extends PagingAndSortingRepository<Indicator, Long> {}
+public interface IndicatorRepository extends PagingAndSortingRepository<Indicator, Long> {
+
+}

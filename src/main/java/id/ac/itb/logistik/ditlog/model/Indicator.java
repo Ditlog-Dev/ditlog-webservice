@@ -1,13 +1,12 @@
 package id.ac.itb.logistik.ditlog.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import java.util.Date;
+import java.util.HashMap;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Date;
-import java.util.HashMap;
 
 @Entity
 @Table(name = "INDIKATOR_PENILAIAN")
