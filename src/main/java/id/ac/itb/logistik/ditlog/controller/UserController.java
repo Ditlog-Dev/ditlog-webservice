@@ -19,26 +19,4 @@ public class UserController {
   @Autowired
   UserRepository userRepo;
 
-  @RequestMapping(value = "/user", method = RequestMethod.POST)
-  public ResponseEntity<BaseResponse> loginUser(@RequestBody User user) {
-    User result = userRepo.findUserByUsernamePassword(user.getUsername(), user.getPassword());
-
-    BaseResponse baseResponse = new BaseResponse();
-    baseResponse.setStatus(true);
-
-    if (result == null) {
-      baseResponse.setCode(400);
-      baseResponse.setPayload("Wrong username/password");
-    } else {
-      String jwtToken = Jwts.builder()
-          .setSubject(user.getUsername())
-          .claim("roles", "user")
-          .signWith(SignatureAlgorithm.HS256, "secretkey").compact();
-
-      baseResponse.setCode(200);
-      baseResponse.setPayload(new UserPayload(result.getIdUser(), jwtToken));
-    }
-
-    return ResponseEntity.ok(baseResponse);
-  }
 }
