@@ -48,13 +48,13 @@ public class AuthController {
 
             baseResponse.setStatus(true);
             baseResponse.setCode(HttpStatus.ACCEPTED.value());
-            baseResponse.setPayload(new UserPayload(result.getIdUser(), jwtToken));
+            baseResponse.setPayload(new UserPayload(result.getIdUser(), result.getIdEmployee(), jwtToken));
         }
 
         return ResponseEntity.ok(baseResponse);
     }
 
-    public String encode(String in) throws Exception {
+    private String encode(String in) throws Exception {
         MessageDigest md = MessageDigest.getInstance("MD5");
         if (in == null) {
             return null;
