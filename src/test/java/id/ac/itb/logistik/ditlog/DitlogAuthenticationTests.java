@@ -22,7 +22,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class DitlogUserServiceTests extends BaseTest {
+public class DitlogAuthenticationTests extends BaseTest {
 
   @Autowired
   UserRepository userRepo;
@@ -41,6 +41,7 @@ public class DitlogUserServiceTests extends BaseTest {
     testUser.setPassword(MD5Encrypt("456"));
     testUser.setIdUser(1L);
     userRepo.save(testUser);
+    testUser.setPassword("456");
 
     setUpIsDone = true;
   }
@@ -53,7 +54,7 @@ public class DitlogUserServiceTests extends BaseTest {
     JSONObject responseJson;
     try {
       responseJson = new JSONObject(response.getBody());
-      Assert.assertEquals(HttpStatus.OK.value(), responseJson.getInt("code"));
+      Assert.assertEquals(HttpStatus.ACCEPTED.value(), responseJson.getInt("code"));
     } catch (JSONException e) {
       e.printStackTrace();
       Assert.fail();
@@ -113,13 +114,12 @@ public class DitlogUserServiceTests extends BaseTest {
     wrongUser.setUsername("zzzzzzzzzz");
     wrongUser.setPassword("zzzzzzzzzz");
 
-    ResponseEntity<String> response = getStringResponseEntity(wrongUser);
-
     JSONObject responseJson;
     try {
+      ResponseEntity<String> response = getStringResponseEntity(wrongUser);
       responseJson = new JSONObject(response.getBody());
-      Assert.assertEquals(400, responseJson.getInt("code"));
-    } catch (JSONException e) {
+      Assert.assertEquals(HttpStatus.UNAUTHORIZED.value(), responseJson.getInt("code"));
+    } catch (Exception e) {
       e.printStackTrace();
       Assert.fail();
     }
@@ -134,7 +134,7 @@ public class DitlogUserServiceTests extends BaseTest {
     HttpEntity<User> entity = new HttpEntity<>(user, headers);
 
     return restTemplate.exchange(
-        createURLWithPort("/user"),
+        createURLWithPort("/login"),
         HttpMethod.POST, entity, String.class
     );
   }
