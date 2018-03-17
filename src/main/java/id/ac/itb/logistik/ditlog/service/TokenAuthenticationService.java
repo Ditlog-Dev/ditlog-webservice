@@ -12,20 +12,25 @@ import java.util.Date;
 import java.util.Map;
 
 public class TokenAuthenticationService {
-    static final long EXPIRATIONTIME = 864_000_000; // 10 days
-    static final String SECRET = "ThisIsASecret";
-    static final String TOKEN_PREFIX = "Bearer";
-    static final String HEADER_STRING = "Authorization";
-    static Map<Long,String> ROLE_CONSTANT = RoleConstant.ROLE;
+    public static final long EXPIRATIONTIME = 864_000_000; // 10 days
+    public static final String SECRET = "ThisIsASecret";
+    public static final String TOKEN_PREFIX = "Bearer";
+    public static final String HEADER_STRING = "Authorization";
+    public static Map<Long,String> ROLE_CONSTANT = RoleConstant.ROLE;
 
     public static String addAuthenticateUser(HttpServletResponse res, User user) {
+        String JWT = getJWT(user);
+        res.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + JWT);
+        return JWT;
+    }
+
+    public static String getJWT(User user){
         String JWT = Jwts.builder()
                 .setSubject(user.getUsername())
                 .claim("roleId",user.getIdEmployee())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
-        res.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + JWT);
         return JWT;
     }
 
