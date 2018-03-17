@@ -2,8 +2,7 @@ package id.ac.itb.logistik.ditlog;
 
 import id.ac.itb.logistik.ditlog.model.User;
 import id.ac.itb.logistik.ditlog.repository.UserRepository;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import id.ac.itb.logistik.ditlog.service.TokenAuthenticationService;
 import java.security.MessageDigest;
 import javax.xml.bind.DatatypeConverter;
 import org.json.JSONException;
@@ -40,6 +39,7 @@ public class DitlogAuthenticationTests extends BaseTest {
     testUser.setUsername("john");
     testUser.setPassword(MD5Encrypt("456"));
     testUser.setIdUser(1L);
+    testUser.setIdEmployee(422L);
     userRepo.save(testUser);
     testUser.setPassword("456");
 
@@ -54,7 +54,7 @@ public class DitlogAuthenticationTests extends BaseTest {
     JSONObject responseJson;
     try {
       responseJson = new JSONObject(response.getBody());
-      Assert.assertEquals(HttpStatus.ACCEPTED.value(), responseJson.getInt("code"));
+      Assert.assertEquals(HttpStatus.OK.value(), responseJson.getInt("code"));
     } catch (JSONException e) {
       e.printStackTrace();
       Assert.fail();
@@ -86,10 +86,7 @@ public class DitlogAuthenticationTests extends BaseTest {
   public void whenPostCorrectAuth_thenGetCorrectJwtToken() {
     ResponseEntity<String> response = getStringResponseEntity(testUser);
 
-    String expectedJwtToken = Jwts.builder()
-        .setSubject(testUser.getUsername())
-        .claim("roles", "user")
-        .signWith(SignatureAlgorithm.HS256, "secretkey").compact();
+    String expectedJwtToken = TokenAuthenticationService.getJWT(testUser);
 
     JSONObject responseJson;
     try {
@@ -118,7 +115,7 @@ public class DitlogAuthenticationTests extends BaseTest {
     try {
       ResponseEntity<String> response = getStringResponseEntity(wrongUser);
       responseJson = new JSONObject(response.getBody());
-      Assert.assertEquals(HttpStatus.UNAUTHORIZED.value(), responseJson.getInt("code"));
+      Assert.assertEquals(HttpStatus.FORBIDDEN.value(), responseJson.getInt("code"));
     } catch (Exception e) {
       e.printStackTrace();
       Assert.fail();
