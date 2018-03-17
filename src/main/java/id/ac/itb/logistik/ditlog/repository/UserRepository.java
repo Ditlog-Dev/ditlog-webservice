@@ -10,5 +10,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
   @Query(value = "SELECT * FROM SILOG_USER WHERE USER_NAME = ?1 AND USER_PASSWORD = ?2", nativeQuery = true)
   User findUserByUsernamePassword(String username, String password);
+  @Query(value = "SELECT * FROM SILOG_USER WHERE USER_NAME = ?1", nativeQuery = true)
+  User findUserByUsername(String username);
 }
 

@@ -4,16 +4,17 @@ import id.ac.itb.logistik.ditlog.model.BaseResponse;
 
 import javax.naming.AuthenticationException;
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.ServletException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-@RestController
 public class ErrorHandler extends ResponseEntityExceptionHandler {
 
   public ErrorHandler() {
@@ -23,7 +24,7 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
   /**
    * General exception. Throw all undefined exception.
    */
-  @ExceptionHandler({ Exception.class })
+  @ExceptionHandler({ Exception.class})
   public ResponseEntity<BaseResponse> handleGeneralException(Exception ex) {
     BaseResponse baseResponse = new BaseResponse();
     baseResponse.setStatus(false);
@@ -47,13 +48,13 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
   /**
    * Handling authentication exception. If username or password didn't match. Or not found in db.
    */
-  @ExceptionHandler(AuthenticationException.class)
+  @ExceptionHandler({AuthenticationException.class})
   public ResponseEntity<BaseResponse> handleAuthException(AuthenticationException ex) {
     BaseResponse baseResponse = new BaseResponse();
     baseResponse.setStatus(false);
-    baseResponse.setCode(HttpStatus.UNAUTHORIZED.value());
+    baseResponse.setCode(HttpStatus.FORBIDDEN.value());
     baseResponse.setMessage(ex.getMessage());
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value()).body(baseResponse);
+    return ResponseEntity.status(HttpStatus.FORBIDDEN.value()).body(baseResponse);
   }
 
 }
