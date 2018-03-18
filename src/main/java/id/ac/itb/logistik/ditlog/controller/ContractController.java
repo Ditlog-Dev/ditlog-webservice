@@ -20,18 +20,18 @@ public class ContractController {
     public ResponseEntity<BaseResponse> getAll(
             @RequestParam(value = "page", defaultValue = "0") String page,
             @RequestParam(value = "limit", defaultValue = "5") String limit,
-            @RequestParam(value = "sort", defaultValue = "id") String sort,
+            @RequestParam(value = "sort", defaultValue = "idSPMK") String sort,
             @RequestParam(value = "dir", defaultValue = "asc") String direction) {
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setStatus(true);
         baseResponse.setCode(HttpStatus.OK.value());
-        baseResponse.setPayload(
-                spmkContractRepository.findAll(
-                        new PageRequest(
-                                Integer.parseInt(page),
-                                Integer.parseInt(limit),
-                                direction.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC,
-                                sort)));
+        baseResponse.setPayload(spmkContractRepository.findAll(
+            new PageRequest(
+                Integer.parseInt(page),
+                Integer.parseInt(limit),
+                direction.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC,
+                sort)));
+
         return ResponseEntity.ok(baseResponse);
     }
 }
