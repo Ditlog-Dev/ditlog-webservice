@@ -83,6 +83,27 @@ public class DitlogAuthenticationTests extends BaseTest {
   }
 
   @Test
+  public void whenPostCorrectAuth_thenGetCorrectRoleId() {
+    ResponseEntity<String> response = getStringResponseEntity(testUser);
+
+    JSONObject responseJson;
+    try {
+      responseJson = new JSONObject(response.getBody());
+      long actualRoleId;
+      Object payload = responseJson.optJSONObject("payload");
+      if (payload != null) {
+        actualRoleId = ((JSONObject) payload).getLong("roleId");
+      } else {
+        actualRoleId = -1;
+      }
+      Assert.assertEquals((long) testUser.getIdEmployee(), actualRoleId);
+    } catch (JSONException e) {
+      e.printStackTrace();
+      Assert.fail();
+    }
+  }
+
+  @Test
   public void whenPostCorrectAuth_thenGetCorrectJwtToken() {
     ResponseEntity<String> response = getStringResponseEntity(testUser);
 
