@@ -1,5 +1,6 @@
 package id.ac.itb.logistik.ditlog.service;
 
+import id.ac.itb.logistik.ditlog.model.RoleConstant;
 import id.ac.itb.logistik.ditlog.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -16,7 +17,6 @@ public class TokenAuthenticationService {
     public static final String SECRET = "ThisIsASecret";
     public static final String TOKEN_PREFIX = "Bearer";
     public static final String HEADER_STRING = "Authorization";
-    public static Map<Long,String> ROLE_CONSTANT = RoleConstant.ROLE;
 
     public static String addAuthenticateUser(HttpServletResponse res, User user) {
         String JWT = getJWT(user);
@@ -47,7 +47,7 @@ public class TokenAuthenticationService {
                 Integer roleId = (Integer) claims.get("roleId");
                 User user = new User();
                 user.setUsername(username);
-                user.setIdUser(Long.valueOf(roleId));
+                user.setIdEmployee(Long.valueOf(roleId));
                 return user;
             } catch (Exception e){
                 throw new MalformedJwtException("Invalid jwt token");

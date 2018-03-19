@@ -30,15 +30,18 @@ public class IndicatorController {
       @RequestParam(value = "sort", defaultValue = "id") String sort,
       @RequestParam(value = "dir", defaultValue = "asc") String direction) {
     BaseResponse baseResponse = new BaseResponse();
+    Iterable<Indicator> result = indicatorRepository.findAll(
+                    new PageRequest(
+                            Integer.parseInt(page),
+                            Integer.parseInt(limit),
+                            direction.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC,
+                            sort));
+    if(result.spliterator().getExactSizeIfKnown() == 0){
+      throw new EntityNotFoundException(Indicator.class.getSimpleName());
+    }
     baseResponse.setStatus(true);
-    baseResponse.setCode(HttpStatus.ACCEPTED.value());
-    baseResponse.setPayload(
-        indicatorRepository.findAll(
-            new PageRequest(
-                Integer.parseInt(page),
-                Integer.parseInt(limit),
-                direction.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC,
-                sort)));
+    baseResponse.setCode(HttpStatus.OK.value());
+    baseResponse.setPayload(result);
     return ResponseEntity.ok(baseResponse);
   }
 
@@ -50,7 +53,7 @@ public class IndicatorController {
       throw new EntityNotFoundException(Indicator.class.getSimpleName());
     }
     baseResponse.setStatus(true);
-    baseResponse.setCode(HttpStatus.ACCEPTED.value());
+    baseResponse.setCode(HttpStatus.OK.value());
     baseResponse.setPayload(indicator);
     return ResponseEntity.ok(baseResponse);
   }
@@ -63,7 +66,7 @@ public class IndicatorController {
       throw new IllegalArgumentException("Unprocessable entity. Check the JSON structure.");
     }
     baseResponse.setStatus(true);
-    baseResponse.setCode(HttpStatus.ACCEPTED.value());
+    baseResponse.setCode(HttpStatus.OK.value());
     baseResponse.setPayload(indicatorNew);
     return ResponseEntity.ok(baseResponse);
   }
