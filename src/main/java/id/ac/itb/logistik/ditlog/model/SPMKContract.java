@@ -13,112 +13,112 @@ import java.util.Date;
 @Table(name = "V_SPMK_ANDROID")
 public class SPMKContract {
   @Column(name = "TAHUN")
-  Long tahun;
+  public Long tahun;
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "ID_SPMK")
-  Long idSPMK;
+  public Long idSPMK;
 
   @Column(name = "NO_SPMK")
-  String noSPMK;
+  public String noSPMK;
 
   @Column(name = "TGL_SPMK")
-  Date tanggalSPMK;
+  public Date tanggalSPMK;
 
   @Column(name = "TGL_MULAI_PEKERJAAN")
-  Date tanggalMulai;
+  public Date tanggalMulai;
 
   @Column(name = "TGL_AKHIR_PEKERJAAN")
-  Date tanggalAkhir;
+  public Date tanggalAkhir;
 
   @Column(name = "JUMLAH_HARI_PEKERJAAN")
-  String jumlahHariPekerjaan;
+  public String jumlahHariPekerjaan;
 
   @Column(name = "JUMLAH_HARI_INSTALASI")
-  String jumlahHariInstalasi;
+  public String jumlahHariInstalasi;
 
   @Column(name = "ID_SPPBJ_HEADER")
-  Long idSPPBJ;
+  public Long idSPPBJ;
 
   @Column(name = "ID_KONTRAK")
-  Long idKontrak;
+  public Long idKontrak;
 
   @Column(name = "NO_KONTRAK")
-  String noKontrak;
+  public String noKontrak;
 
   @Column(name = "TGL_KONTRAK")
-  Date tanggalKontrak;
+  public Date tanggalKontrak;
 
   @Column(name = "ID_HPS")
-  Long idHPS;
+  public Long idHPS;
 
   @Column(name = "NM_HPS")
-  String nmHPS;
+  public String nmHPS;
 
   @Column(name = "NAMA_PENYEDIA")
-  String namaPenyedia;
+  public String namaPenyedia;
 
   @Column(name = "ALAMAT")
-  String alamat;
+  public String alamat;
 
   @Column(name = "JABATAN_PIMPINAN")
-  String jabatanPimpinan;
+  public String jabatanPimpinan;
 
   @Column(name = "PIMPINAN_PERUSAHAAN")
-  String pimpinanPerusahaan;
+  public String pimpinanPerusahaan;
 
   @Column(name = "NILAI_NEGOSIASI")
-  Long nilaiNegosiasi;
+  public Long nilaiNegosiasi;
 
   @Column(name = "JENIS")
-  String jenis;
+  public String jenis;
 
   @Column(name = "ID_TTD")
-  Long idTTD;
+  public Long idTTD;
 
   @Column(name = "PPK")
-  String ppk;
+  public String ppk;
 
   @Column(name = "NIP")
-  String nip;
+  public String nip;
 
   @Column(name = "ID_JNS_PENGADAAN")
-  Long idJenisPengadaan;
+  public Long idJenisPengadaan;
 
   @Column(name = "METODE_PENGADAAN")
-  String metodePengadaan;
+  public String metodePengadaan;
 
   @Column(name = "BERDASARKAN_WAKTU_PELAKSANAAN")
-  String berdasarkanWaktuPelaksanaan;
+  public String berdasarkanWaktuPelaksanaan;
 
   @Column(name = "NO_PO")
-  String noPO;
+  public String noPO;
 
   @Column(name = "MASA_GARANSI_PURNA_JUAL")
-  String masaGaransiPurnaJual;
+  public String masaGaransiPurnaJual;
 
   @Column(name = "NILAI_UANG_MUKA")
-  Long nilaiUangMuka;
+  public Long nilaiUangMuka;
 
   @Column(name = "SUMBER_DANA")
-  String sumberDana;
+  public String sumberDana;
 
   @Column(name = "CARA_PEMBAYARAN")
-  String caraPembayaran;
+  public String caraPembayaran;
 
   @Column(name = "JENIS_KONTRAK")
-  String jenisKontrak;
+  public String jenisKontrak;
 
   @Column(name = "NAMA_BANK")
-  String namaBank;
+  public String namaBank;
 
   @Column(name = "NO_REKENING")
-  String noRekening;
+  public String noRekening;
 
   @Column(name = "REK_ATAS_NAMA")
-  String rekAtasNama;
+  public String rekAtasNama;
 
   @Column(name = "VENDOR_ID")
-  Long vendorId;
+  public Long vendorId;
 }
