@@ -1,4 +1,4 @@
-package id.ac.itb.logistik.ditlog.service;
+package id.ac.itb.logistik.ditlog.model;
 
 import java.util.HashMap;
 import java.util.Map;

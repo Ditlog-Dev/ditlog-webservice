@@ -1,5 +1,6 @@
 package id.ac.itb.logistik.ditlog.service;
 
+import id.ac.itb.logistik.ditlog.model.RoleConstant;
 import id.ac.itb.logistik.ditlog.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import id.ac.itb.logistik.ditlog.model.SPMKContract;
 import id.ac.itb.logistik.ditlog.model.User;
 import id.ac.itb.logistik.ditlog.repository.SPMKContractRepository;
-import id.ac.itb.logistik.ditlog.service.RoleConstant;
+import id.ac.itb.logistik.ditlog.model.RoleConstant;
 import id.ac.itb.logistik.ditlog.service.TokenAuthenticationService;
 import org.json.JSONException;
 import org.json.JSONObject;
