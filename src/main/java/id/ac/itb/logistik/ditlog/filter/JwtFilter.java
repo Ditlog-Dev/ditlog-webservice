@@ -25,6 +25,7 @@ public class JwtFilter extends GenericFilterBean {
     if(user == null){
       response.sendError(HttpStatus.UNAUTHORIZED.value(), "Invalid authentication");
     }
+    req.setAttribute("user",user);
 
     chain.doFilter(req, res);
   }

@@ -47,7 +47,7 @@ public class TokenAuthenticationService {
                 Integer roleId = (Integer) claims.get("roleId");
                 User user = new User();
                 user.setUsername(username);
-                user.setIdUser(Long.valueOf(roleId));
+                user.setIdEmployee(Long.valueOf(roleId));
                 return user;
             } catch (Exception e){
                 throw new MalformedJwtException("Invalid jwt token");
