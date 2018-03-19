@@ -119,7 +119,7 @@ public class SPMKContract {
   private Long vendorId;
 
   @Transient
-  private BigDecimal nilaiRataRata;
+  private BigDecimal nilaiRataRata = BigDecimal.ZERO;
 
   public SPMKContract() {
   }

@@ -17,7 +17,6 @@ public class TokenAuthenticationService {
     public static final String SECRET = "ThisIsASecret";
     public static final String TOKEN_PREFIX = "Bearer";
     public static final String HEADER_STRING = "Authorization";
-    public static Map<Long,String> ROLE_CONSTANT = RoleConstant.ROLE;
 
     public static String addAuthenticateUser(HttpServletResponse res, User user) {
         String JWT = getJWT(user);
