@@ -21,18 +21,18 @@ public class User {
   @Column(name = "USER_PASSWORD")
   String password;
 
-  @Column(name = "ID_EMPLOYEES")
-  Long idEmployee;
+  @Column(name = "ID_RESPONSIBILITY")
+  Long idResponsibility;
 
-  @Column(name = "EMAIL")
-  String email;
+  @Column(name = "VENDOR_ID")
+  Long idVendor;
 
   public User() {
   }
 
-  public User(String username, Long idEmployee) {
+  public User(String username, Long idUser) {
     this.username = username;
-    this.idEmployee = idEmployee;
+    this.idUser = idUser;
   }
 
   public String getUsername() {
@@ -47,12 +47,12 @@ public class User {
     return password;
   }
 
-  public Long getIdEmployee() {
-    return idEmployee;
+  public Long getIdResponsibility() {
+    return idResponsibility;
   }
 
-  public String getEmail() {
-    return email;
+  public Long getIdVendor() {
+    return idVendor;
   }
 
   public void setUsername(String username) {
@@ -67,11 +67,11 @@ public class User {
     this.password = password;
   }
 
-  public void setEmail(String email) {
-    this.email = email;
+  public void setIdResponsibility(Long idResponsibility) {
+    this.idResponsibility = idResponsibility;
   }
 
-  public void setIdEmployee(Long id_employee) {
-    this.idEmployee = id_employee;
+  public void setIdVendor(Long idVendor) {
+    this.idVendor = idVendor;
   }
 }

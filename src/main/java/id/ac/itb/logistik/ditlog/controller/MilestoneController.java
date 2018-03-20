@@ -26,23 +26,23 @@ public class MilestoneController {
         BaseResponse baseResponse = new BaseResponse();
         User user = (User) request.getAttribute("user");
         Long roleId = user.getIdEmployee();
-        Iterable<Milestone> result = new Iterable<Milestone>() {
-            @Override
-            public Iterator<Milestone> iterator() {
-                return null;
-            }
-        };
-        if (ROLE.get(roleId).equals("VENDOR")) {
-            result = milestoneRepo.findByIdUser(user.getIdUser());
-        } else if (ROLE.get(roleId).equals("PEMERIKSA_JASA")){
-            result = milestoneRepo.findByIdUser();
-        }
-        if(result.spliterator().getExactSizeIfKnown() == 0){
-            throw new EntityNotFoundException(SPMKContract.class.getSimpleName());
-        }
+//        Iterable<Milestone> result = new Iterable<Milestone>() {
+//            @Override
+//            public Iterator<Milestone> iterator() {
+//                return null;
+//            }
+//        };
+//        if (ROLE.get(roleId).equals("VENDOR")) {
+//            result = milestoneRepo.findByIdUser(user.getIdUser());
+//        } else if (ROLE.get(roleId).equals("PEMERIKSA_JASA")){
+//            result = milestoneRepo.findByIdUser();
+//        }
+//        if(result.spliterator().getExactSizeIfKnown() == 0){
+//            throw new EntityNotFoundException(SPMKContract.class.getSimpleName());
+//        }
         baseResponse.setStatus(true);
         baseResponse.setCode(HttpStatus.OK.value());
-        baseResponse.setPayload(result);
+        baseResponse.setPayload(user);
 
         return ResponseEntity.ok(baseResponse);
     }

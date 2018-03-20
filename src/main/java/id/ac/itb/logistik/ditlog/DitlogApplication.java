@@ -20,6 +20,7 @@ public class DitlogApplication {
 		registrationBean.setFilter(new JwtFilter());
         registrationBean.addUrlPatterns("/indicators");
         registrationBean.addUrlPatterns("/contracts");
+        registrationBean.addUrlPatterns("/milestone");
 		return registrationBean;
 	}
 
