@@ -6,6 +6,7 @@ import id.ac.itb.logistik.ditlog.repository.IndicatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.persistence.EntityNotFoundException;
 
 @RestController
 public class IndicatorController {
@@ -27,43 +30,44 @@ public class IndicatorController {
       @RequestParam(value = "sort", defaultValue = "id") String sort,
       @RequestParam(value = "dir", defaultValue = "asc") String direction) {
     BaseResponse baseResponse = new BaseResponse();
+    Iterable<Indicator> result = indicatorRepository.findAll(
+                    new PageRequest(
+                            Integer.parseInt(page),
+                            Integer.parseInt(limit),
+                            direction.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC,
+                            sort));
+    if(result.spliterator().getExactSizeIfKnown() == 0){
+      throw new EntityNotFoundException(Indicator.class.getSimpleName());
+    }
     baseResponse.setStatus(true);
-    baseResponse.setCode(200);
-    baseResponse.setPayload(
-        indicatorRepository.findAll(
-            new PageRequest(
-                Integer.parseInt(page),
-                Integer.parseInt(limit),
-                direction.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC,
-                sort)));
+    baseResponse.setCode(HttpStatus.OK.value());
+    baseResponse.setPayload(result);
     return ResponseEntity.ok(baseResponse);
   }
 
   @GetMapping("/indicators/{id}")
   public ResponseEntity<BaseResponse> getById(@PathVariable("id") Long id) {
     BaseResponse baseResponse = new BaseResponse();
+    Indicator indicator = indicatorRepository.findOne(id);
+    if(indicator == null){
+      throw new EntityNotFoundException(Indicator.class.getSimpleName());
+    }
     baseResponse.setStatus(true);
-    baseResponse.setCode(200);
-    baseResponse.setPayload(indicatorRepository.findOne(id));
+    baseResponse.setCode(HttpStatus.OK.value());
+    baseResponse.setPayload(indicator);
     return ResponseEntity.ok(baseResponse);
   }
 
   @PostMapping("/indicators")
   public ResponseEntity<BaseResponse> addIndicator(@RequestBody Indicator indicator) {
     BaseResponse baseResponse = new BaseResponse();
-
-    Indicator result = indicatorRepository.save(indicator);
-
-    if (result != null) {
-      baseResponse.setStatus(true);
-      baseResponse.setCode(200);
-      baseResponse.setPayload(result);
-    } else {
-      baseResponse.setStatus(true);
-      baseResponse.setCode(422);
-      baseResponse.setMessage("Unprocessable entity. Check the JSON structure.");
+    Indicator indicatorNew = indicatorRepository.save(indicator);
+    if (indicatorNew == null) {
+      throw new IllegalArgumentException("Unprocessable entity. Check the JSON structure.");
     }
-
+    baseResponse.setStatus(true);
+    baseResponse.setCode(HttpStatus.OK.value());
+    baseResponse.setPayload(indicatorNew);
     return ResponseEntity.ok(baseResponse);
   }
 }
