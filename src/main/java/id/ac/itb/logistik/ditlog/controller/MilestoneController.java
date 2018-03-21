@@ -3,6 +3,7 @@ package id.ac.itb.logistik.ditlog.controller;
 import id.ac.itb.logistik.ditlog.model.*;
 import id.ac.itb.logistik.ditlog.repository.MilestoneRepository;
 import id.ac.itb.logistik.ditlog.repository.SPMKContractRepository;
+import id.ac.itb.logistik.ditlog.repository.TugasPemeriksaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,8 @@ public class MilestoneController {
     MilestoneRepository milestoneRepo;
     @Autowired
     SPMKContractRepository spmkRepo;
+    @Autowired
+    TugasPemeriksaRepository pemeriksaRepo;
 
     Map<Long,String> ROLE = RoleConstant.ROLE;
 
@@ -40,6 +43,10 @@ public class MilestoneController {
             @Override
             public Iterator<Milestone> iterator() { return null; }
         };
+        Iterable<TugasPemeriksa> resultsPemeriksa = new Iterable<TugasPemeriksa>() {
+            @Override
+            public Iterator<TugasPemeriksa> iterator() { return null; }
+        };
         ArrayList<Milestone> results = new ArrayList<Milestone>();
         if (ROLE.get(idResponsibility).equals("VENDOR")) {
             resultsContract = spmkRepo.findByIdVendor(user.getIdVendor());
@@ -52,9 +59,19 @@ public class MilestoneController {
                 }
             }
         }
-//        else if (ROLE.get(idResponsibility).equals("PEMERIKSA_JASA")){
-//            result = milestoneRepo.findByIdUser();
-//        }
+        else if (ROLE.get(idResponsibility).equals("PEMERIKSA_JASA")){
+            resultsPemeriksa = pemeriksaRepo.findByIdPemeriksa(user.getIdUser());
+            for (TugasPemeriksa resultPemeriksa : resultsPemeriksa) {
+                SPMKContract resultContract =
+                        spmkRepo.findContractById(resultPemeriksa.getIdKontrak());
+                resultsMilestone = milestoneRepo.findByIdSPMK(resultContract.getIdSPMK());
+                for (Milestone resultMilestone : resultsMilestone) {
+                    if (resultMilestone.getStatusRencana().equals("1") &&
+                            resultMilestone.getStatusRealisasi() == null)
+                        results.add(resultMilestone);
+                }
+            }
+        }
         if(resultsMilestone.spliterator().getExactSizeIfKnown() == 0){
             throw new EntityNotFoundException(SPMKContract.class.getSimpleName());
         }
