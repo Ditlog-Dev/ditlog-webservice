@@ -21,6 +21,7 @@ This repository contains the backend/REST API server of the DitLog Project.
 2. Import this repo
 3. Configure database connection. Change `application.properties.sample` to `application.properties` and configure credential
 4. Download `odbc7.jar` from oracle, and put it on folder `libs/`
+5. Run gradle for the first time
 
 ## Running using Docker in development
 
@@ -50,12 +51,28 @@ Internet access for pulling gradle dependencies and Docker images.
 - Using pagination
 ```
 /indicators?page=W&limit=X&dir=Y&sort=Z
-    
+
 W = page number (positive number >= 0, default = 0)
 X = item limit per page (positive number >= 1, default = 5)
 Y = direction (asc or desc, default=asc)
-Z = sorting key (check JSON structure. in indicator, default = id) 
+Z = sorting key (check JSON structure. in indicator, default = id)
 ```
+
+---
+## API
+
+| Endpoint | Method | Note |
+| ------ | ------ | ------ |
+| /indicators?page=W&limit=X&dir=Y&sort=Z | GET | **W** = page number (positive number >= 0, default = 0)<br>X = item limit per page (positive number >= 1, default = 5)<br>**Y** = direction (asc or desc, default=asc)<br>**Z** = sorting key (check JSON structure. in indicator, default = id) |
+| /indicators | POST | {<br>"name" : "new indicator"<br>} |
+| /login | POST | {<br>"username" : "aep",<br>"password" : "123"<br>} |
+
+### IMPORTANT NOTE
+<div class="alert alert-warning">
+All resource are protected by JWT Authentication.
+</div>
+
+Get your jwt token, from ``/login``. And then, make sure include this token with ``Bearer`` in Authorization header for every request.
 
 ---
 
