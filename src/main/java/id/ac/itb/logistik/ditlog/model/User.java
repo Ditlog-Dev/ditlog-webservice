@@ -5,33 +5,44 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.sql.Date;
 
 @Entity
 @Table(name = "SILOG_USER")
 public class User {
-
   @Id
   @GeneratedValue
   @Column(name = "ID_USER")
-  Long idUser;
+  private Long idUser;
 
   @Column(name = "USER_NAME")
-  String username;
+  private String username;
 
   @Column(name = "USER_PASSWORD")
-  String password;
+  private String password;
+
+  @Column(name = "EMAIL")
+  private String email;
 
   @Column(name = "ID_RESPONSIBILITY")
-  Long idResponsibility;
+  private Long idResponsibility;
 
   @Column(name = "VENDOR_ID")
-  Long idVendor;
+  private Long vendorId;
 
   public User() {
   }
 
-  public User(String username, Long idUser) {
+  public User(String username, Long idResponsibility) {
     this.username = username;
+    this.idResponsibility = idResponsibility;
+  }
+
+  public Long getIdUser() {
+    return idUser;
+  }
+
+  public void setIdUser(Long idUser) {
     this.idUser = idUser;
   }
 
@@ -39,39 +50,52 @@ public class User {
     return username;
   }
 
-  public Long getIdUser() {
-    return idUser;
+  public void setUsername(String username) {
+    this.username = username;
   }
 
   public String getPassword() {
     return password;
   }
 
-  public Long getIdResponsibility() {
-    return idResponsibility;
-  }
-
-  public Long getIdVendor() {
-    return idVendor;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  public void setIdUser(Long id_user) {
-    this.idUser = id_user;
-  }
-
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public Long getIdResponsibility() {
+    return idResponsibility;
   }
 
   public void setIdResponsibility(Long idResponsibility) {
     this.idResponsibility = idResponsibility;
   }
 
-  public void setIdVendor(Long idVendor) {
-    this.idVendor = idVendor;
+  public Long getVendorId() {
+    return vendorId;
+  }
+
+  public void setVendorId(Long vendorId) {
+    this.vendorId = vendorId;
+  }
+
+
+  @Override
+  public String toString() {
+    return "User{" +
+            ", idUser=" + idUser +
+            ", username='" + username + '\'' +
+            ", password='" + password + '\'' +
+            ", email='" + email + '\'' +
+            ", idResponsibility=" + idResponsibility +
+            ", vendorId=" + vendorId +
+            '}';
   }
 }

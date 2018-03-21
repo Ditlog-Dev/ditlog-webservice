@@ -25,12 +25,12 @@ public class TokenAuthenticationService {
     }
 
     public static String getJWT(User user){
-        if (user.getIdVendor() == null) user.setIdVendor(0L);
+        if (user.getVendorId() == null) user.setVendorId(0L);
         String JWT = Jwts.builder()
                 .setSubject(user.getUsername())
                 .claim("idUser",user.getIdUser())
                 .claim("idResponsibility", user.getIdResponsibility())
-                .claim("idVendor", user.getIdVendor())
+                .claim("idVendor", user.getVendorId())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
@@ -53,7 +53,7 @@ public class TokenAuthenticationService {
                 User user = new User();
                 user.setUsername(username);
                 user.setIdResponsibility(Long.valueOf(idResponsibility));
-                user.setIdVendor(Long.valueOf(idVendor));
+                user.setVendorId(Long.valueOf(idVendor));
                 user.setIdUser(Long.valueOf(idUser));
                 return user;
             } catch (Exception e){

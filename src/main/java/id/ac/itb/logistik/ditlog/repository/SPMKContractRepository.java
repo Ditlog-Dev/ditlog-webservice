@@ -19,5 +19,5 @@ public interface SPMKContractRepository extends CrudRepository<SPMKContract, Lon
     @Query(value = "SELECT * FROM V_SPMK_ANDROID WHERE JENIS = ?1 AND TAHUN = ?2", nativeQuery = true)
     Iterable<SPMKContract> findAllByTagAndYear(String tag, Long year);
     @Query(value = "SELECT * FROM V_SPMK_ANDROID WHERE VENDOR_ID = ?1", nativeQuery = true)
-    Iterable<SPMKContract> findByIdVendor(Long idVendor);
+    Iterable<SPMKContract> findByIdVendor(Long vendorId);
 }

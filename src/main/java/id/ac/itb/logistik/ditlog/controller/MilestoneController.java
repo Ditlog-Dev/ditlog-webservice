@@ -50,7 +50,7 @@ public class MilestoneController {
         ArrayList<Milestone> results = new ArrayList<Milestone>();
 
         if (ROLE.get(idResponsibility).equals("VENDOR")) {
-            resultsContract = spmkRepo.findByIdVendor(user.getIdVendor());
+            resultsContract = spmkRepo.findByIdVendor(user.getVendorId());
             for (SPMKContract resultContract : resultsContract) {
                 resultsMilestone = milestoneRepo.findByIdSPMK(resultContract.getIdSPMK());
                 for (Milestone resultMilestone : resultsMilestone) {
@@ -75,8 +75,9 @@ public class MilestoneController {
                 }
             }
         }
-
-        System.out.println(results.size());
+        if(results.spliterator().getExactSizeIfKnown() == 0){
+            throw new EntityNotFoundException(Milestone.class.getSimpleName());
+        }
 
         baseResponse.setStatus(true);
         baseResponse.setCode(HttpStatus.OK.value());
