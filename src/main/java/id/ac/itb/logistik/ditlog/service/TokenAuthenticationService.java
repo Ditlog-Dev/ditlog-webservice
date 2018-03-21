@@ -28,6 +28,8 @@ public class TokenAuthenticationService {
         String JWT = Jwts.builder()
                 .setSubject(user.getUsername())
                 .claim("idUser",user.getIdUser())
+                .claim("idResponsibility", user.getIdResponsibility())
+                .claim("idVendor", user.getIdVendor())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
@@ -44,11 +46,14 @@ public class TokenAuthenticationService {
                         .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
                         .getBody();
                 String username = claims.getSubject();
-                Integer roleId = (Integer) claims.get("roleId");
+                Integer idResponsibility = (Integer) claims.get("idResponsibility");
+                Integer idVendor = (Integer) claims.get("idVendor");
+                Integer idUser = (Integer) claims.get("idUser");
                 User user = new User();
                 user.setUsername(username);
-                user.setIdUser(Long.valueOf(roleId));
-
+                user.setIdResponsibility(Long.valueOf(idResponsibility));
+                user.setIdVendor(Long.valueOf(idVendor));
+                user.setIdUser(Long.valueOf(idUser));
                 return user;
             } catch (Exception e){
                 throw new MalformedJwtException("Invalid jwt token");

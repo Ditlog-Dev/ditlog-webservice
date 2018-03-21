@@ -39,7 +39,8 @@ public class AuthController {
             String jwtToken = TokenAuthenticationService.addAuthenticateUser(response,result);
             baseResponse.setStatus(true);
             baseResponse.setCode(HttpStatus.OK.value());
-            baseResponse.setPayload(new UserPayload(result.getIdUser(), result.getIdEmployee(), jwtToken));
+            baseResponse.setPayload(new UserPayload(result.getIdUser(),
+                    result.getIdResponsibility(), jwtToken));
         }
         return ResponseEntity.ok(baseResponse);
     }
