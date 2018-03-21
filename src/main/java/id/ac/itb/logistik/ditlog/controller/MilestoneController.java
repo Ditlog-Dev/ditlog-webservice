@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Null;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -30,19 +32,30 @@ public class MilestoneController {
         BaseResponse baseResponse = new BaseResponse();
         User user = (User) request.getAttribute("user");
         Long idResponsibility = user.getIdResponsibility();
-        Iterable<SPMKContract> results = new Iterable<SPMKContract>() {
+        Iterable<SPMKContract> resultsContract = new Iterable<SPMKContract>() {
             @Override
-            public Iterator<SPMKContract> iterator() {
-                return null;
-            }
+            public Iterator<SPMKContract> iterator() { return null; }
         };
+        Iterable<Milestone> resultsMilestone = new Iterable<Milestone>() {
+            @Override
+            public Iterator<Milestone> iterator() { return null; }
+        };
+        ArrayList<Milestone> results = new ArrayList<Milestone>();
         if (ROLE.get(idResponsibility).equals("VENDOR")) {
-            results = spmkRepo.findByIdVendor(user.getIdVendor());
+            resultsContract = spmkRepo.findByIdVendor(user.getIdVendor());
+            for (SPMKContract resultContract : resultsContract) {
+                resultsMilestone = milestoneRepo.findByIdSPMK(resultContract.getIdSPMK());
+                for (Milestone resultMilestone : resultsMilestone) {
+                    if (resultMilestone.getStatusRencana().equals("1") &&
+                            resultMilestone.getStatusRealisasi() == null)
+                    results.add(resultMilestone);
+                }
+            }
         }
 //        else if (ROLE.get(idResponsibility).equals("PEMERIKSA_JASA")){
 //            result = milestoneRepo.findByIdUser();
 //        }
-        if(results.spliterator().getExactSizeIfKnown() == 0){
+        if(resultsMilestone.spliterator().getExactSizeIfKnown() == 0){
             throw new EntityNotFoundException(SPMKContract.class.getSimpleName());
         }
         baseResponse.setStatus(true);

@@ -22,11 +22,9 @@ public class Milestone {
     @Column(name = "ID_SPMK")
     private Long idSPMK;
 
-    @JsonIgnore
     @Column(name = "TGL_RENCANA")
     private Date tglRencana = new Date();
 
-    @JsonIgnore
     @Column(name = "TGL_REALISASI")
     private Date tglRealisasi;
 
