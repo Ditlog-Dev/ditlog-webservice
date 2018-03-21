@@ -16,4 +16,7 @@ public interface MilestoneRepository extends CrudRepository<Milestone, Long> {
 
     @Query(value = "SELECT * FROM PROGRES_JASA WHERE ID_SPMK = ?1", nativeQuery = true)
     Iterable<Milestone> findByIdSPMK(Long idSPMK);
+
+    @Query(value = "UPDATE PROGRES_JASA WHERE ID_PROGRES = ?1", nativeQuery = true)
+    void updateById(Long idProgres);
 }
