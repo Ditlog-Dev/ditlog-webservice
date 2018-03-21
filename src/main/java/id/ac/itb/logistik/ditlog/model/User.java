@@ -21,6 +21,9 @@ public class User {
   @Column(name = "USER_PASSWORD")
   String password;
 
+  @Column(name = "ID_EMPLOYEES")
+  Long idEmployee;
+
   @Column(name = "ID_RESPONSIBILITY")
   Long idResponsibility;
 
@@ -47,6 +50,10 @@ public class User {
     return password;
   }
 
+  public Long getIdEmployee() {
+    return idEmployee;
+  }
+
   public Long getIdResponsibility() {
     return idResponsibility;
   }
@@ -65,6 +72,10 @@ public class User {
 
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  public void setIdEmployee(Long idEmployee) {
+    this.idEmployee = idEmployee;
   }
 
   public void setIdResponsibility(Long idResponsibility) {

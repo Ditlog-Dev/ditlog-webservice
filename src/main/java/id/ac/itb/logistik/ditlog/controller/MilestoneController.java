@@ -25,7 +25,7 @@ public class MilestoneController {
     public ResponseEntity<BaseResponse> getAll(HttpServletRequest request) {
         BaseResponse baseResponse = new BaseResponse();
         User user = (User) request.getAttribute("user");
-        Long roleId = user.getIdEmployee();
+//        Long roleId = user.getIdEmployee();
 //        Iterable<Milestone> result = new Iterable<Milestone>() {
 //            @Override
 //            public Iterator<Milestone> iterator() {
