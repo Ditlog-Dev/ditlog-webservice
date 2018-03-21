@@ -25,6 +25,7 @@ public class TokenAuthenticationService {
     }
 
     public static String getJWT(User user){
+        if (user.getIdVendor() == null) user.setIdVendor(0L);
         String JWT = Jwts.builder()
                 .setSubject(user.getUsername())
                 .claim("idUser",user.getIdUser())
@@ -56,7 +57,7 @@ public class TokenAuthenticationService {
                 user.setIdUser(Long.valueOf(idUser));
                 return user;
             } catch (Exception e){
-                throw new MalformedJwtException("Invalid jwt token");
+                e.printStackTrace();
             }
         }
         return null;

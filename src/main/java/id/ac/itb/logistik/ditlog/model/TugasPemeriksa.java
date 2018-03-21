@@ -3,11 +3,12 @@ package id.ac.itb.logistik.ditlog.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Date;
 
 @Entity
 @Table(name = "PROGRES_JASA")
-public class TugasPemeriksa {
+public class TugasPemeriksa implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "ID_TUGAS", unique = true, nullable = false)

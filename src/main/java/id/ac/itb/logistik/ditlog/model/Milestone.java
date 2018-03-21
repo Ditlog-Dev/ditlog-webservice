@@ -168,4 +168,12 @@ public class Milestone {
     public void setTglUpdate(Date tglUpdate) {
         this.tglUpdate = tglUpdate;
     }
+
+    @Override
+    public String toString() {
+        return "Milestone{" +
+                "idProgres=" + idProgres +
+                ", idSPMK=" + idSPMK +
+                '}';
+    }
 }

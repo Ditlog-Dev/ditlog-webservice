@@ -48,22 +48,10 @@ public class MilestoneController {
             public Iterator<TugasPemeriksa> iterator() { return null; }
         };
         ArrayList<Milestone> results = new ArrayList<Milestone>();
+
         if (ROLE.get(idResponsibility).equals("VENDOR")) {
             resultsContract = spmkRepo.findByIdVendor(user.getIdVendor());
             for (SPMKContract resultContract : resultsContract) {
-                resultsMilestone = milestoneRepo.findByIdSPMK(resultContract.getIdSPMK());
-                for (Milestone resultMilestone : resultsMilestone) {
-                    if (resultMilestone.getStatusRencana().equals("1") &&
-                            resultMilestone.getStatusRealisasi() == null)
-                    results.add(resultMilestone);
-                }
-            }
-        }
-        else if (ROLE.get(idResponsibility).equals("PEMERIKSA_JASA")){
-            resultsPemeriksa = pemeriksaRepo.findByIdPemeriksa(user.getIdUser());
-            for (TugasPemeriksa resultPemeriksa : resultsPemeriksa) {
-                SPMKContract resultContract =
-                        spmkRepo.findContractById(resultPemeriksa.getIdKontrak());
                 resultsMilestone = milestoneRepo.findByIdSPMK(resultContract.getIdSPMK());
                 for (Milestone resultMilestone : resultsMilestone) {
                     if (resultMilestone.getStatusRencana().equals("1") &&
@@ -72,9 +60,24 @@ public class MilestoneController {
                 }
             }
         }
-        if(resultsMilestone.spliterator().getExactSizeIfKnown() == 0){
-            throw new EntityNotFoundException(SPMKContract.class.getSimpleName());
+        else if (ROLE.get(idResponsibility).equals("PEMERIKSA_JASA")){
+            resultsPemeriksa = pemeriksaRepo.findByIdPemeriksa(user.getIdUser());
+            for (TugasPemeriksa resultPemeriksa : resultsPemeriksa) {
+                SPMKContract resultContract =
+                        spmkRepo.findContractById(resultPemeriksa.getIdKontrak());
+                if (resultContract != null) {
+                    resultsMilestone = milestoneRepo.findByIdSPMK(resultContract.getIdSPMK());
+                    for (Milestone resultMilestone : resultsMilestone) {
+                        if (resultMilestone.getStatusRencana().equals("1") &&
+                                resultMilestone.getStatusRealisasi() == null)
+                            results.add(resultMilestone);
+                    }
+                }
+            }
         }
+
+        System.out.println(results.size());
+
         baseResponse.setStatus(true);
         baseResponse.setCode(HttpStatus.OK.value());
         baseResponse.setPayload(results);
