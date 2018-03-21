@@ -83,4 +83,26 @@ public class MilestoneController {
         return ResponseEntity.ok(baseResponse);
     }
 
+    @RequestMapping(value = "/milestone/{id}/{status}", method = RequestMethod.PUT)
+    public ResponseEntity<BaseResponse> update(HttpServletRequest request,
+                                                @PathVariable("id") Long idProgres,
+                                               @PathVariable("status") String status) {
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setPayload(null);
+        User user = (User) request.getAttribute("user");
+        if (ROLE.get(user.getIdResponsibility()).equals("PEMERIKSA_JASA")) {
+            Milestone milestoneToUpdate = milestoneRepo.findById(idProgres);
+            milestoneToUpdate.setStatusRencana(status);
+            System.out.println(milestoneToUpdate);
+            milestoneRepo.save(milestoneToUpdate);
+//            milestoneRepo.updateById(idProgres, status);
+            baseResponse.setStatus(true);
+            baseResponse.setCode(HttpStatus.OK.value());
+        }
+        else {
+            baseResponse.setStatus(true);
+            baseResponse.setCode(HttpStatus.FORBIDDEN.value());
+        }
+        return ResponseEntity.ok(baseResponse);
+    }
 }

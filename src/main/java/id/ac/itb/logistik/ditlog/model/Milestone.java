@@ -2,10 +2,7 @@ package id.ac.itb.logistik.ditlog.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -13,6 +10,7 @@ import java.util.Date;
 public class Milestone {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_PROGRES", unique = true, nullable = false)
     private Long idProgres = 0L;
 
@@ -174,6 +172,7 @@ public class Milestone {
         return "Milestone{" +
                 "idProgres=" + idProgres +
                 ", idSPMK=" + idSPMK +
+                ", statusRencana=" + statusRencana +
                 '}';
     }
 }

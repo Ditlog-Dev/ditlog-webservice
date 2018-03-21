@@ -1,9 +1,13 @@
 package id.ac.itb.logistik.ditlog.repository;
 
 import id.ac.itb.logistik.ditlog.model.Milestone;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+
+import javax.transaction.Transactional;
 
 @Repository
 public interface MilestoneRepository extends CrudRepository<Milestone, Long> {
@@ -17,6 +21,10 @@ public interface MilestoneRepository extends CrudRepository<Milestone, Long> {
     @Query(value = "SELECT * FROM PROGRES_JASA WHERE ID_SPMK = ?1", nativeQuery = true)
     Iterable<Milestone> findByIdSPMK(Long idSPMK);
 
-    @Query(value = "UPDATE PROGRES_JASA WHERE ID_PROGRES = ?1", nativeQuery = true)
-    void updateById(Long idProgres);
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE PROGRES_JASA SET STATUS_RENCANA = ?2 WHERE ID_PROGRES = ?1", nativeQuery = true)
+    void updateById(Long idProgres, String status);
+
+
 }
