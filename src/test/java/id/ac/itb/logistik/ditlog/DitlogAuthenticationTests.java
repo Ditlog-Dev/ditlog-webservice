@@ -39,7 +39,7 @@ public class DitlogAuthenticationTests extends BaseTest {
     testUser.setUsername("john");
     testUser.setPassword(MD5Encrypt("456"));
     testUser.setIdUser(1L);
-    testUser.setIdEmployee(422L);
+    testUser.setIdResponsibility(422L);
     userRepo.save(testUser);
     testUser.setPassword("456");
 
@@ -92,11 +92,11 @@ public class DitlogAuthenticationTests extends BaseTest {
       long actualRoleId;
       Object payload = responseJson.optJSONObject("payload");
       if (payload != null) {
-        actualRoleId = ((JSONObject) payload).getLong("roleId");
+        actualRoleId = ((JSONObject) payload).getLong("idResponsibility");
       } else {
         actualRoleId = -1;
       }
-      Assert.assertEquals((long) testUser.getIdEmployee(), actualRoleId);
+      Assert.assertEquals((long) testUser.getIdResponsibility(), actualRoleId);
     } catch (JSONException e) {
       e.printStackTrace();
       Assert.fail();
