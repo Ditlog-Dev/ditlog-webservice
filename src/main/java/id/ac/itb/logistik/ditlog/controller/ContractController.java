@@ -28,7 +28,7 @@ public class ContractController {
     ) {
         BaseResponse baseResponse = new BaseResponse();
         User user = (User) request.getAttribute("user");
-        Long roleId = user.getIdEmployee();
+        Long roleId = user.getIdResponsibility();
         Iterable<SPMKContract> result = new Iterable<SPMKContract>() {
             @Override
             public Iterator<SPMKContract> iterator() {
