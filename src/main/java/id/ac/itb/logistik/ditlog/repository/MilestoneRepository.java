@@ -6,11 +6,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
+import org.springframework.data.repository.PagingAndSortingRepository;
+
 
 import javax.transaction.Transactional;
 
 @Repository
-public interface MilestoneRepository extends CrudRepository<Milestone, Long> {
+public interface MilestoneRepository extends PagingAndSortingRepository<Milestone, Long> {
 
     @Query(value = "SELECT * FROM PROGRES_JASA WHERE ID_PROGRES = ?1", nativeQuery = true)
     Milestone findById(Long idProgres);

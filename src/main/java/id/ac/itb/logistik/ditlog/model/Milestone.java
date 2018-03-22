@@ -171,8 +171,17 @@ public class Milestone {
     public String toString() {
         return "Milestone{" +
                 "idProgres=" + idProgres +
+                "idDetail=" + idDetail +
                 ", idSPMK=" + idSPMK +
+                ", tanggalRencana=" + tglRencana +
+                ", tanggalRealisasi=" + tglRealisasi +
+                ", prosRencana=" + persentaseRencana +
+                ", prosRealisasi=" + persentaseRealisasi +
+                ", ketRencana=" + keteranganRencana +
+                ", ketRealisasi=" + keteranganRealisasi +
                 ", statusRencana=" + statusRencana +
+                ", statusRealisasi=" + statusRealisasi +
+                "idUser=" + idUser +
                 '}';
     }
 }
