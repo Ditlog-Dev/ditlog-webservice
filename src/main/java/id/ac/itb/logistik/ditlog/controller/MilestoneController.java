@@ -27,7 +27,7 @@ public class MilestoneController {
 
     Map<Long,String> ROLE = RoleConstant.ROLE;
 
-    @GetMapping("/milestone")
+    @GetMapping("/rencana")
     public ResponseEntity<BaseResponse> getAll(HttpServletRequest request) {
         BaseResponse baseResponse = new BaseResponse();
         User user = (User) request.getAttribute("user");
@@ -51,7 +51,7 @@ public class MilestoneController {
             for (SPMKContract resultContract : resultsContract) {
                 resultsMilestone = milestoneRepo.findByIdSPMK(resultContract.getIdSPMK());
                 for (Milestone resultMilestone : resultsMilestone) {
-                    if (resultMilestone.getStatusRencana().equals("1") &&
+                    if (resultMilestone.getStatusRencana() == null &&
                             resultMilestone.getStatusRealisasi() == null)
                         results.add(resultMilestone);
                 }
@@ -65,7 +65,7 @@ public class MilestoneController {
                 if (resultContract != null) {
                     resultsMilestone = milestoneRepo.findByIdSPMK(resultContract.getIdSPMK());
                     for (Milestone resultMilestone : resultsMilestone) {
-                        if (resultMilestone.getStatusRencana().equals("1") &&
+                        if (resultMilestone.getStatusRencana() == null &&
                                 resultMilestone.getStatusRealisasi() == null)
                             results.add(resultMilestone);
                     }
@@ -83,26 +83,57 @@ public class MilestoneController {
         return ResponseEntity.ok(baseResponse);
     }
 
-    @RequestMapping(value = "/milestone/{id}/{status}", method = RequestMethod.PUT)
-    public ResponseEntity<BaseResponse> update(HttpServletRequest request,
-                                                @PathVariable("id") Long idProgres,
-                                               @PathVariable("status") String status) {
+    @GetMapping("/rencana/{idSpmk}")
+    public ResponseEntity<BaseResponse> getByIdSpmk(HttpServletRequest request,
+                                                    @PathVariable("idSpmk") Long idSpmk
+                                                    ) {
         BaseResponse baseResponse = new BaseResponse();
-        baseResponse.setPayload(null);
         User user = (User) request.getAttribute("user");
-        if (ROLE.get(user.getIdResponsibility()).equals("PEMERIKSA_JASA")) {
-            Milestone milestoneToUpdate = milestoneRepo.findById(idProgres);
-            milestoneToUpdate.setStatusRencana(status);
-            System.out.println(milestoneToUpdate);
-            milestoneRepo.save(milestoneToUpdate);
-//            milestoneRepo.updateById(idProgres, status);
-            baseResponse.setStatus(true);
-            baseResponse.setCode(HttpStatus.OK.value());
+        ArrayList<Milestone> results = new ArrayList<Milestone>();
+
+        Iterable<Milestone> resultsMilestone = new Iterable<Milestone>() {
+            @Override
+            public Iterator<Milestone> iterator() { return null; }
+        };
+        resultsMilestone = milestoneRepo.findByIdSPMK(idSpmk);
+
+        for (Milestone resultMilestone : resultsMilestone) {
+            if (resultMilestone.getStatusRencana() == null &&
+                    resultMilestone.getStatusRealisasi() == null)
+                results.add(resultMilestone);
         }
-        else {
-            baseResponse.setStatus(true);
-            baseResponse.setCode(HttpStatus.FORBIDDEN.value());
+
+        if(results.spliterator().getExactSizeIfKnown() == 0){
+            throw new EntityNotFoundException(Milestone.class.getSimpleName());
         }
+
+        baseResponse.setStatus(true);
+        baseResponse.setCode(HttpStatus.OK.value());
+        baseResponse.setPayload(results);
+
         return ResponseEntity.ok(baseResponse);
     }
+
+//    @RequestMapping(value = "/milestone/{idSpmk}/{status}", method = RequestMethod.PUT)
+//    public ResponseEntity<BaseResponse> update(HttpServletRequest request,
+//                                                @PathVariable("idSpmk") Long idSpmk,
+//                                               @PathVariable("status") String status) {
+//        BaseResponse baseResponse = new BaseResponse();
+//        baseResponse.setPayload(null);
+//        User user = (User) request.getAttribute("user");
+//        if (ROLE.get(user.getIdResponsibility()).equals("PEMERIKSA_JASA")) {
+//             = milestoneRepo.findByIdSPMK(idSpmk);
+//            milestoneToUpdate.setStatusRencana(status);
+//            System.out.println(milestoneToUpdate);
+//            milestoneRepo.save(milestoneToUpdate);
+////            milestoneRepo.updateById(idProgres, status);
+//            baseResponse.setStatus(true);
+//            baseResponse.setCode(HttpStatus.OK.value());
+//        }
+//        else {
+//            baseResponse.setStatus(true);
+//            baseResponse.setCode(HttpStatus.FORBIDDEN.value());
+//        }
+//        return ResponseEntity.ok(baseResponse);
+//    }
 }
