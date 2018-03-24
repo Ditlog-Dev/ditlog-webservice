@@ -90,7 +90,7 @@ public class MilestoneController {
         BaseResponse baseResponse = new BaseResponse();
         User user = (User) request.getAttribute("user");
         ArrayList<Milestone> results = new ArrayList<Milestone>();
-
+        //System.out.println(user);
         Iterable<Milestone> resultsMilestone = new Iterable<Milestone>() {
             @Override
             public Iterator<Milestone> iterator() { return null; }
@@ -114,26 +114,43 @@ public class MilestoneController {
         return ResponseEntity.ok(baseResponse);
     }
 
-//    @RequestMapping(value = "/milestone/{idSpmk}/{status}", method = RequestMethod.PUT)
-//    public ResponseEntity<BaseResponse> update(HttpServletRequest request,
-//                                                @PathVariable("idSpmk") Long idSpmk,
-//                                               @PathVariable("status") String status) {
-//        BaseResponse baseResponse = new BaseResponse();
-//        baseResponse.setPayload(null);
-//        User user = (User) request.getAttribute("user");
-//        if (ROLE.get(user.getIdResponsibility()).equals("PEMERIKSA_JASA")) {
-//             = milestoneRepo.findByIdSPMK(idSpmk);
-//            milestoneToUpdate.setStatusRencana(status);
-//            System.out.println(milestoneToUpdate);
-//            milestoneRepo.save(milestoneToUpdate);
-////            milestoneRepo.updateById(idProgres, status);
-//            baseResponse.setStatus(true);
-//            baseResponse.setCode(HttpStatus.OK.value());
-//        }
-//        else {
-//            baseResponse.setStatus(true);
-//            baseResponse.setCode(HttpStatus.FORBIDDEN.value());
-//        }
-//        return ResponseEntity.ok(baseResponse);
-//    }
+    @RequestMapping(value = "/rencana/{idSpmk}/{status}", method = RequestMethod.PUT)
+    public ResponseEntity<BaseResponse> update(HttpServletRequest request,
+                                                @PathVariable("idSpmk") Long idSpmk,
+                                               @PathVariable("status") String status) {
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setPayload(null);
+        User user = (User) request.getAttribute("user");
+
+        if (!status.equals("1") && !status.equals("0")) {
+            baseResponse.setStatus(false);
+            baseResponse.setMessage("Wrong status, 0 for rejected, 1 for accepted");
+            baseResponse.setCode(HttpStatus.BAD_REQUEST.value());
+            return ResponseEntity.ok(baseResponse);
+        }
+
+        Iterable<Milestone> resultsMilestone = new Iterable<Milestone>() {
+            @Override
+            public Iterator<Milestone> iterator() { return null; }
+        };
+
+        if (ROLE.get(user.getIdResponsibility()).equals("PEMERIKSA_JASA")) {
+            resultsMilestone = milestoneRepo.findByIdSPMK(idSpmk);
+            for (Milestone resultMilestone : resultsMilestone) {
+                if (resultMilestone.getStatusRencana() == null &&
+                        resultMilestone.getStatusRealisasi() == null) {
+                    resultMilestone.setStatusRencana(status);
+                    milestoneRepo.save(resultMilestone);
+                }
+            }
+            baseResponse.setStatus(true);
+            baseResponse.setCode(HttpStatus.OK.value());
+        }
+        else {
+            baseResponse.setStatus(false);
+            baseResponse.setMessage("Unauthorized access");
+            baseResponse.setCode(HttpStatus.FORBIDDEN.value());
+        }
+        return ResponseEntity.ok(baseResponse);
+    }
 }
