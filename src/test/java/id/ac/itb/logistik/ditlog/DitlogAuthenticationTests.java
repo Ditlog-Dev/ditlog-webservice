@@ -3,6 +3,7 @@ package id.ac.itb.logistik.ditlog;
 import id.ac.itb.logistik.ditlog.model.User;
 import id.ac.itb.logistik.ditlog.repository.UserRepository;
 import id.ac.itb.logistik.ditlog.service.TokenAuthenticationService;
+import id.ac.itb.logistik.ditlog.utility.Encryption;
 import java.security.MessageDigest;
 import javax.xml.bind.DatatypeConverter;
 import org.json.JSONException;
@@ -31,13 +32,13 @@ public class DitlogAuthenticationTests extends BaseTest {
   private static boolean setUpIsDone = false;
 
   @Before
-  public void setUp() {
+  public void setUp() throws Exception {
     if (setUpIsDone) {
       return;
     }
     testUser = new User();
     testUser.setUsername("john");
-    testUser.setPassword(MD5Encrypt("456"));
+    testUser.setPassword(Encryption.encodeWithMD5("456"));
     testUser.setIdUser(1L);
     testUser.setIdResponsibility(422L);
     userRepo.save(testUser);
@@ -144,8 +145,8 @@ public class DitlogAuthenticationTests extends BaseTest {
   }
 
   @Test
-  public void checkMD5Encryption() {
-    Assert.assertEquals("202cb962ac59075b964b07152d234b70", MD5Encrypt("123"));
+  public void checkMD5Encryption() throws Exception {
+    Assert.assertEquals("202cb962ac59075b964b07152d234b70", Encryption.encodeWithMD5("123"));
   }
 
   private ResponseEntity<String> getStringResponseEntity(User user) {
@@ -155,18 +156,5 @@ public class DitlogAuthenticationTests extends BaseTest {
         createURLWithPort("/login"),
         HttpMethod.POST, entity, String.class
     );
-  }
-
-  private String MD5Encrypt(String password) {
-    try {
-      MessageDigest md = MessageDigest.getInstance("MD5");
-      md.update(password.getBytes());
-      byte[] digest = md.digest();
-      return DatatypeConverter
-          .printHexBinary(digest).toLowerCase();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return null;
   }
 }

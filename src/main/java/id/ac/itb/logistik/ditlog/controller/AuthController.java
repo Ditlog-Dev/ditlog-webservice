@@ -5,6 +5,7 @@ import id.ac.itb.logistik.ditlog.model.BaseResponse;
 import id.ac.itb.logistik.ditlog.model.User;
 import id.ac.itb.logistik.ditlog.model.UserPayload;
 import id.ac.itb.logistik.ditlog.repository.UserRepository;
+import id.ac.itb.logistik.ditlog.utility.Encryption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class AuthController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<BaseResponse> loginUser(HttpServletResponse response, @RequestBody User user) throws Exception {
         try{
-            user.setPassword(encode(user.getPassword()));
+            user.setPassword(Encryption.encodeWithMD5(user.getPassword()));
         } catch (Exception e) {
             throw new AuthenticationException("Failed to encode");
         }
@@ -43,17 +44,5 @@ public class AuthController {
                     result.getIdResponsibility(), jwtToken));
         }
         return ResponseEntity.ok(baseResponse);
-    }
-
-    private String encode(String in) throws Exception {
-        MessageDigest md = MessageDigest.getInstance("MD5");
-        try {
-            md.update(in.getBytes());
-            byte[] digest = md.digest();
-            String myHash = DatatypeConverter.printHexBinary(digest).toLowerCase();
-            return myHash;
-        } catch (Exception se) {
-            throw new Exception("Exception while encoding " + se);
-        }
     }
 }
