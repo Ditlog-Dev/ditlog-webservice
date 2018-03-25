@@ -141,11 +141,6 @@ public class DitlogAuthenticationTests extends BaseTest {
     }
   }
 
-  @Test
-  public void checkMD5Encryption() throws Exception {
-    Assert.assertEquals("202cb962ac59075b964b07152d234b70", Encryption.encodeWithMD5("123"));
-  }
-
   private ResponseEntity<String> getStringResponseEntity(User user) {
     HttpEntity<User> entity = new HttpEntity<>(user, headers);
 
