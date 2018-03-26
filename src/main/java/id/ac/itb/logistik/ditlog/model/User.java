@@ -10,8 +10,8 @@ import java.sql.Date;
 @Entity
 @Table(name = "SILOG_USER")
 public class User {
-  @Column(name = "ID_SUSULAN_USER")
-  private Long idSusulanUser;
+  @Column(name = "ID_USULAN_USER")
+  private Long idUsulanUser;
 
   @Column(name = "STATUS")
   private char status;
@@ -33,7 +33,7 @@ public class User {
   @Column(name = "EMAIL")
   private String email;
 
-  @Column(name = "USER_ID_ORACE")
+  @Column(name = "USER_ID_ORACLE")
   private String userIdOracle;
 
   @Column(name = "TGL_CREATE")
@@ -60,14 +60,6 @@ public class User {
   public User(String username, Long idResponsibility) {
     this.username = username;
     this.idResponsibility = idResponsibility;
-  }
-
-  public Long getIdSusulanUser() {
-    return idSusulanUser;
-  }
-
-  public void setIdSusulanUser(Long idSusulanUser) {
-    this.idSusulanUser = idSusulanUser;
   }
 
   public char getStatus() {
@@ -174,10 +166,18 @@ public class User {
     this.namaUser = namaUser;
   }
 
+  public Long getIdUsulanUser() {
+    return idUsulanUser;
+  }
+
+  public void setIdUsulanUser(Long idUsulanUser) {
+    this.idUsulanUser = idUsulanUser;
+  }
+
   @Override
   public String toString() {
     return "User{" +
-            "idSusulanUser=" + idSusulanUser +
+            "idUsulanUser=" + idUsulanUser +
             ", status=" + status +
             ", idUser=" + idUser +
             ", username='" + username + '\'' +
