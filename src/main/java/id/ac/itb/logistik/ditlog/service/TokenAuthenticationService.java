@@ -24,13 +24,14 @@ public class TokenAuthenticationService {
         return JWT;
     }
 
-    public static String getJWT(User user){
+    public static String getJWT(User user) {
         if (user.getVendorId() == null) user.setVendorId(0L);
         String JWT = Jwts.builder()
                 .setSubject(user.getUsername())
-                .claim("idUser",user.getIdUser())
+                .claim("idUser", user.getIdUser())
                 .claim("idResponsibility", user.getIdResponsibility())
                 .claim("idVendor", user.getVendorId())
+                .claim("roleId", user.getIdResponsibility())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
@@ -47,16 +48,16 @@ public class TokenAuthenticationService {
                         .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
                         .getBody();
                 String username = claims.getSubject();
-                Integer idResponsibility = (Integer) claims.get("idResponsibility");
+                Integer roleId = (Integer) claims.get("idResponsibility");
                 Integer idVendor = (Integer) claims.get("idVendor");
                 Integer idUser = (Integer) claims.get("idUser");
                 User user = new User();
                 user.setUsername(username);
-                user.setIdResponsibility(Long.valueOf(idResponsibility));
                 user.setVendorId(Long.valueOf(idVendor));
                 user.setIdUser(Long.valueOf(idUser));
+                user.setIdResponsibility(Long.valueOf(roleId));
                 return user;
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
