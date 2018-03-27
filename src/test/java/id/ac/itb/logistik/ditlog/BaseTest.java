@@ -2,6 +2,7 @@ package id.ac.itb.logistik.ditlog;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import id.ac.itb.logistik.ditlog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +16,9 @@ public abstract class BaseTest {
 
   @Autowired
   protected TestRestTemplate restTemplate;
+
+  @Autowired
+  UserRepository userRepo;
 
   @LocalServerPort
   protected int port;

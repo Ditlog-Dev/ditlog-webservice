@@ -61,6 +61,12 @@ public class DitlogContractTests extends BaseTest {
         userKasieBarang = new User("john kasie barang", RoleConstant.KASIE_PEMERIKSA_BARANG);
         userJasa = new User("john jasa", RoleConstant.PEMERIKSA_JASA);
         userKasieJasa = new User("john kasie jasa", RoleConstant.KASIE_PEMERIKSA_JASA);
+        userRepo.save(userVendor);
+        userRepo.save(userKasubdit);
+        userRepo.save(userBarang);
+        userRepo.save(userKasieBarang);
+        userRepo.save(userJasa);
+        userRepo.save(userKasieJasa);
         setUpIsDone = true;
     }
 
