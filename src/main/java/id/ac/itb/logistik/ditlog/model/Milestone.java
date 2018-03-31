@@ -38,6 +38,9 @@ public class Milestone {
     @Column(name = "KET_REALISASI")
     private String keteranganRealisasi;
 
+    @Column(name = "ALASAN_REJECT_RENCANA")
+    private String alasanReject;
+
     @JsonIgnore
     @Column(name = "TGL_BUAT")
     private Date tglBuat;
@@ -54,6 +57,10 @@ public class Milestone {
 
     @Column(name = "STATUS_REALISASI")
     private String statusRealisasi;
+
+    public String getAlasanReject() {
+        return alasanReject;
+    }
 
     public Date getTglRencana() {
         return tglRencana;
@@ -109,6 +116,10 @@ public class Milestone {
 
     public String getStatusRencana() {
         return statusRencana;
+    }
+
+    public void setAlasanReject(String alasanReject) {
+        this.alasanReject = alasanReject;
     }
 
     public void setIdDetail(Long idDetail) {
@@ -181,6 +192,7 @@ public class Milestone {
                 ", ketRealisasi=" + keteranganRealisasi +
                 ", statusRencana=" + statusRencana +
                 ", statusRealisasi=" + statusRealisasi +
+                ", alasanReject=" + alasanReject +
                 "idUser=" + idUser +
                 '}';
     }

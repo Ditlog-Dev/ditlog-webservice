@@ -7,6 +7,7 @@ import id.ac.itb.logistik.ditlog.repository.TugasPemeriksaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -15,6 +16,7 @@ import javax.validation.constraints.Null;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 @RestController
 public class MilestoneController {
@@ -26,6 +28,10 @@ public class MilestoneController {
     TugasPemeriksaRepository pemeriksaRepo;
 
     Map<Long,String> ROLE = RoleConstant.ROLE;
+
+    class Keterangan {
+        public String ket;
+    }
 
     @GetMapping("/rencana/{idSpmk}")
     public ResponseEntity<BaseResponse> getByIdSpmk(HttpServletRequest request,
@@ -63,6 +69,7 @@ public class MilestoneController {
 
     @RequestMapping(value = "/rencana/{idSpmk}/{status}", method = RequestMethod.PUT)
     public ResponseEntity<BaseResponse> update(HttpServletRequest request,
+                                                @RequestBody Keterangan keterangan,
                                                 @PathVariable("idSpmk") Long idSpmk,
                                                @PathVariable("status") String status) {
         BaseResponse baseResponse = new BaseResponse();
@@ -72,6 +79,13 @@ public class MilestoneController {
         if (!status.equals("1") && !status.equals("0")) {
             baseResponse.setStatus(false);
             baseResponse.setMessage("Wrong status, 0 for rejected, 1 for accepted");
+            baseResponse.setCode(HttpStatus.BAD_REQUEST.value());
+            return ResponseEntity.ok(baseResponse);
+        }
+
+        if (!Pattern.matches("[a-zA-Z0-9\\s\\-]{1,50}", keterangan.ket)) {
+            baseResponse.setStatus(false);
+            baseResponse.setMessage("Wrong ketarangan");
             baseResponse.setCode(HttpStatus.BAD_REQUEST.value());
             return ResponseEntity.ok(baseResponse);
         }
@@ -86,6 +100,7 @@ public class MilestoneController {
             for (Milestone resultMilestone : resultsMilestone) {
                 if (resultMilestone.getStatusRealisasi() == null) {
                     resultMilestone.setStatusRencana(status);
+                    resultMilestone.setAlasanReject(keterangan.ket);
                     milestoneRepo.save(resultMilestone);
                 }
             }
