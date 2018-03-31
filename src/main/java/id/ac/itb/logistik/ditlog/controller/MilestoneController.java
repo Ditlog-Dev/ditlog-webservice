@@ -33,6 +33,8 @@ public class MilestoneController {
         public String ket;
     }
 
+    class
+
     @GetMapping("/rencana/{idSpmk}")
     public ResponseEntity<BaseResponse> getByIdSpmk(HttpServletRequest request,
                                                     @PathVariable("idSpmk") Long idSpmk
@@ -73,7 +75,6 @@ public class MilestoneController {
                                                 @PathVariable("idSpmk") Long idSpmk,
                                                @PathVariable("status") String status) {
         BaseResponse baseResponse = new BaseResponse();
-        baseResponse.setPayload(null);
         User user = (User) request.getAttribute("user");
 
         if (!status.equals("1") && !status.equals("0")) {
@@ -104,6 +105,49 @@ public class MilestoneController {
                     milestoneRepo.save(resultMilestone);
                 }
             }
+            baseResponse.setStatus(true);
+            baseResponse.setCode(HttpStatus.OK.value());
+        }
+        else {
+            baseResponse.setStatus(false);
+            baseResponse.setMessage("Unauthorized access");
+            baseResponse.setCode(HttpStatus.FORBIDDEN.value());
+        }
+        return ResponseEntity.ok(baseResponse);
+    }
+
+    @RequestMapping(value = "/rencana/{idSpmk}", method = RequestMethod.POST)
+    public ResponseEntity<BaseResponse> insert(HttpServletRequest request,
+                                               @RequestBody ArrayList<Milestone> listOfRencana,
+                                               @PathVariable("idSpmk") Long idSpmk) {
+        BaseResponse baseResponse = new BaseResponse();
+        User user = (User) request.getAttribute("user");
+
+        //validate input
+        for (Milestone rencana : listOfRencana) {
+            if (rencana.getStatusRencana() != null ||
+                    rencana.getStatusRealisasi() != null) {
+                baseResponse.setStatus(false);
+                baseResponse.setMessage("Wrong input rencana");
+                baseResponse.setCode(HttpStatus.BAD_REQUEST.value());
+            }
+        }
+
+        Iterable<Milestone> resultsMilestone = new Iterable<Milestone>() {
+            @Override
+            public Iterator<Milestone> iterator() { return null; }
+        };
+
+        if (ROLE.get(user.getIdResponsibility()).equals("VENDOR")) {
+            //delete all relevant milestones
+            resultsMilestone = milestoneRepo.findByIdSPMK(idSpmk);
+            for (Milestone resultMilestone : resultsMilestone) {
+                if (resultMilestone.getStatusRealisasi() == null) {
+                    milestoneRepo.delete(resultMilestone);
+                }
+            }
+            //insert new milestones
+            milestoneRepo.save(listOfRencana);
             baseResponse.setStatus(true);
             baseResponse.setCode(HttpStatus.OK.value());
         }
