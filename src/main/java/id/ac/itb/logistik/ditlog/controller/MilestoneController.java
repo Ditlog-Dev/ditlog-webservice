@@ -27,62 +27,6 @@ public class MilestoneController {
 
     Map<Long,String> ROLE = RoleConstant.ROLE;
 
-    @GetMapping("/rencana")
-    public ResponseEntity<BaseResponse> getAll(HttpServletRequest request) {
-        BaseResponse baseResponse = new BaseResponse();
-        User user = (User) request.getAttribute("user");
-        Long idResponsibility = user.getIdResponsibility();
-        Iterable<SPMKContract> resultsContract = new Iterable<SPMKContract>() {
-            @Override
-            public Iterator<SPMKContract> iterator() { return null; }
-        };
-        Iterable<Milestone> resultsMilestone = new Iterable<Milestone>() {
-            @Override
-            public Iterator<Milestone> iterator() { return null; }
-        };
-        Iterable<TugasPemeriksa> resultsPemeriksa = new Iterable<TugasPemeriksa>() {
-            @Override
-            public Iterator<TugasPemeriksa> iterator() { return null; }
-        };
-        ArrayList<Milestone> results = new ArrayList<Milestone>();
-
-        if (ROLE.get(idResponsibility).equals("VENDOR")) {
-            resultsContract = spmkRepo.findByIdVendor(user.getVendorId());
-            for (SPMKContract resultContract : resultsContract) {
-                resultsMilestone = milestoneRepo.findByIdSPMK(resultContract.getIdSPMK());
-                for (Milestone resultMilestone : resultsMilestone) {
-                    if (resultMilestone.getStatusRencana() == null &&
-                            resultMilestone.getStatusRealisasi() == null)
-                        results.add(resultMilestone);
-                }
-            }
-        }
-        else if (ROLE.get(idResponsibility).equals("PEMERIKSA_JASA")){
-            resultsPemeriksa = pemeriksaRepo.findByIdPemeriksa(user.getIdUser());
-            for (TugasPemeriksa resultPemeriksa : resultsPemeriksa) {
-                SPMKContract resultContract =
-                        spmkRepo.findContractById(resultPemeriksa.getIdKontrak());
-                if (resultContract != null) {
-                    resultsMilestone = milestoneRepo.findByIdSPMK(resultContract.getIdSPMK());
-                    for (Milestone resultMilestone : resultsMilestone) {
-                        if (resultMilestone.getStatusRencana() == null &&
-                                resultMilestone.getStatusRealisasi() == null)
-                            results.add(resultMilestone);
-                    }
-                }
-            }
-        }
-        if(results.spliterator().getExactSizeIfKnown() == 0){
-            throw new EntityNotFoundException(Milestone.class.getSimpleName());
-        }
-
-        baseResponse.setStatus(true);
-        baseResponse.setCode(HttpStatus.OK.value());
-        baseResponse.setPayload(results);
-
-        return ResponseEntity.ok(baseResponse);
-    }
-
     @GetMapping("/rencana/{idSpmk}")
     public ResponseEntity<BaseResponse> getByIdSpmk(HttpServletRequest request,
                                                     @PathVariable("idSpmk") Long idSpmk
@@ -90,26 +34,29 @@ public class MilestoneController {
         BaseResponse baseResponse = new BaseResponse();
         User user = (User) request.getAttribute("user");
         ArrayList<Milestone> results = new ArrayList<Milestone>();
-        //System.out.println(user);
         Iterable<Milestone> resultsMilestone = new Iterable<Milestone>() {
             @Override
             public Iterator<Milestone> iterator() { return null; }
         };
-        resultsMilestone = milestoneRepo.findByIdSPMK(idSpmk);
 
-        for (Milestone resultMilestone : resultsMilestone) {
-            if (resultMilestone.getStatusRencana() == null &&
-                    resultMilestone.getStatusRealisasi() == null)
-                results.add(resultMilestone);
+        if (ROLE.get(user.getIdResponsibility()).equals("PEMERIKSA_JASA")
+                || ROLE.get(user.getIdResponsibility()).equals("VENDOR")) {
+
+            resultsMilestone = milestoneRepo.findByIdSPMK(idSpmk);
+
+            for (Milestone resultMilestone : resultsMilestone) {
+                if (resultMilestone.getStatusRealisasi() == null)
+                    results.add(resultMilestone);
+            }
+            baseResponse.setStatus(true);
+            baseResponse.setCode(HttpStatus.OK.value());
+            baseResponse.setPayload(results);
         }
-
-        if(results.spliterator().getExactSizeIfKnown() == 0){
-            throw new EntityNotFoundException(Milestone.class.getSimpleName());
+        else {
+            baseResponse.setStatus(false);
+            baseResponse.setCode(HttpStatus.FORBIDDEN.value());
+            baseResponse.setMessage("UNAUTHORIZED ACCESS");
         }
-
-        baseResponse.setStatus(true);
-        baseResponse.setCode(HttpStatus.OK.value());
-        baseResponse.setPayload(results);
 
         return ResponseEntity.ok(baseResponse);
     }
@@ -137,8 +84,7 @@ public class MilestoneController {
         if (ROLE.get(user.getIdResponsibility()).equals("PEMERIKSA_JASA")) {
             resultsMilestone = milestoneRepo.findByIdSPMK(idSpmk);
             for (Milestone resultMilestone : resultsMilestone) {
-                if (resultMilestone.getStatusRencana() == null &&
-                        resultMilestone.getStatusRealisasi() == null) {
+                if (resultMilestone.getStatusRealisasi() == null) {
                     resultMilestone.setStatusRencana(status);
                     milestoneRepo.save(resultMilestone);
                 }
