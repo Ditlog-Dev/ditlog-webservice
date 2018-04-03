@@ -28,5 +28,4 @@ public interface MilestoneRepository extends PagingAndSortingRepository<Mileston
     @Query(value = "UPDATE PROGRES_JASA SET STATUS_RENCANA = ?2 WHERE ID_PROGRES = ?1", nativeQuery = true)
     void updateById(Long idProgres, String status);
 
-
 }
