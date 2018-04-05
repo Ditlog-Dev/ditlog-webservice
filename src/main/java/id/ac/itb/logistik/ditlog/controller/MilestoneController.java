@@ -33,8 +33,6 @@ public class MilestoneController {
         public String ket;
     }
 
-    class
-
     @GetMapping("/rencana/{idSpmk}")
     public ResponseEntity<BaseResponse> getByIdSpmk(HttpServletRequest request,
                                                     @PathVariable("idSpmk") Long idSpmk
@@ -126,7 +124,7 @@ public class MilestoneController {
         //validate input
         for (Milestone rencana : listOfRencana) {
             if (rencana.getStatusRencana() != null ||
-                    rencana.getStatusRealisasi() != null) {
+                    rencana.getStatusRealisasi() !=                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 null) {
                 baseResponse.setStatus(false);
                 baseResponse.setMessage("Wrong input rencana");
                 baseResponse.setCode(HttpStatus.BAD_REQUEST.value());
