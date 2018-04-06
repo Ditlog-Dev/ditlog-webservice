@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Null;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @RestController
@@ -31,7 +29,17 @@ public class MilestoneController {
 
     class Keterangan {
         public String ket;
+
+        public String getKet() {
+            return ket;
+        }
+
+        public void setKet(String ket) {
+            this.ket = ket;
+        }
     }
+
+    class rencanaList extends ArrayList<Milestone> {}
 
     @GetMapping("/rencana/{idSpmk}")
     public ResponseEntity<BaseResponse> getByIdSpmk(HttpServletRequest request,
@@ -67,56 +75,56 @@ public class MilestoneController {
         return ResponseEntity.ok(baseResponse);
     }
 
-    @RequestMapping(value = "/rencana/{idSpmk}/{status}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/rencana/{idSpmk}/{status}", method = RequestMethod.POST)
     public ResponseEntity<BaseResponse> update(HttpServletRequest request,
                                                 @RequestBody Keterangan keterangan,
                                                 @PathVariable("idSpmk") Long idSpmk,
                                                @PathVariable("status") String status) {
         BaseResponse baseResponse = new BaseResponse();
-        User user = (User) request.getAttribute("user");
-
-        if (!status.equals("1") && !status.equals("0")) {
-            baseResponse.setStatus(false);
-            baseResponse.setMessage("Wrong status, 0 for rejected, 1 for accepted");
-            baseResponse.setCode(HttpStatus.BAD_REQUEST.value());
-            return ResponseEntity.ok(baseResponse);
-        }
-
-        if (!Pattern.matches("[a-zA-Z0-9\\s\\-]{1,50}", keterangan.ket)) {
-            baseResponse.setStatus(false);
-            baseResponse.setMessage("Wrong ketarangan");
-            baseResponse.setCode(HttpStatus.BAD_REQUEST.value());
-            return ResponseEntity.ok(baseResponse);
-        }
-
-        Iterable<Milestone> resultsMilestone = new Iterable<Milestone>() {
-            @Override
-            public Iterator<Milestone> iterator() { return null; }
-        };
-
-        if (ROLE.get(user.getIdResponsibility()).equals("PEMERIKSA_JASA")) {
-            resultsMilestone = milestoneRepo.findByIdSPMK(idSpmk);
-            for (Milestone resultMilestone : resultsMilestone) {
-                if (resultMilestone.getStatusRealisasi() == null) {
-                    resultMilestone.setStatusRencana(status);
-                    resultMilestone.setAlasanReject(keterangan.ket);
-                    milestoneRepo.save(resultMilestone);
-                }
-            }
-            baseResponse.setStatus(true);
-            baseResponse.setCode(HttpStatus.OK.value());
-        }
-        else {
-            baseResponse.setStatus(false);
-            baseResponse.setMessage("Unauthorized access");
-            baseResponse.setCode(HttpStatus.FORBIDDEN.value());
-        }
+//        User user = (User) request.getAttribute("user");
+//
+//        if (!status.equals("1") && !status.equals("0")) {
+//            baseResponse.setStatus(false);
+//            baseResponse.setMessage("Wrong status, 0 for rejected, 1 for accepted");
+//            baseResponse.setCode(HttpStatus.BAD_REQUEST.value());
+//            return ResponseEntity.ok(baseResponse);
+//        }
+//
+//        if (!Pattern.matches("[a-zA-Z0-9\\s\\-]{1,50}", keterangan.ket)) {
+//            baseResponse.setStatus(false);
+//            baseResponse.setMessage("Wrong ketarangan");
+//            baseResponse.setCode(HttpStatus.BAD_REQUEST.value());
+//            return ResponseEntity.ok(baseResponse);
+//        }
+//
+//        Iterable<Milestone> resultsMilestone = new Iterable<Milestone>() {
+//            @Override
+//            public Iterator<Milestone> iterator() { return null; }
+//        };
+//
+//        if (ROLE.get(user.getIdResponsibility()).equals("PEMERIKSA_JASA")) {
+//            resultsMilestone = milestoneRepo.findByIdSPMK(idSpmk);
+//            for (Milestone resultMilestone : resultsMilestone) {
+//                if (resultMilestone.getStatusRealisasi() == null) {
+//                    resultMilestone.setStatusRencana(status);
+//                    resultMilestone.setAlasanReject(keterangan.ket);
+//                    milestoneRepo.save(resultMilestone);
+//                }
+//            }
+//            baseResponse.setStatus(true);
+//            baseResponse.setCode(HttpStatus.OK.value());
+//        }
+//        else {
+//            baseResponse.setStatus(false);
+//            baseResponse.setMessage("Unauthorized access");
+//            baseResponse.setCode(HttpStatus.FORBIDDEN.value());
+//        }
         return ResponseEntity.ok(baseResponse);
     }
 
     @RequestMapping(value = "/rencana/{idSpmk}", method = RequestMethod.POST)
     public ResponseEntity<BaseResponse> insert(HttpServletRequest request,
-                                               @RequestBody ArrayList<Milestone> listOfRencana,
+                                               @RequestBody Milestone[] listOfRencana,
                                                @PathVariable("idSpmk") Long idSpmk) {
         BaseResponse baseResponse = new BaseResponse();
         User user = (User) request.getAttribute("user");
@@ -124,10 +132,11 @@ public class MilestoneController {
         //validate input
         for (Milestone rencana : listOfRencana) {
             if (rencana.getStatusRencana() != null ||
-                    rencana.getStatusRealisasi() !=                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 null) {
+                    rencana.getStatusRealisasi() != null) {
                 baseResponse.setStatus(false);
                 baseResponse.setMessage("Wrong input rencana");
                 baseResponse.setCode(HttpStatus.BAD_REQUEST.value());
+                return ResponseEntity.ok(baseResponse);
             }
         }
 
@@ -137,17 +146,28 @@ public class MilestoneController {
         };
 
         if (ROLE.get(user.getIdResponsibility()).equals("VENDOR")) {
-            //delete all relevant milestones
-            resultsMilestone = milestoneRepo.findByIdSPMK(idSpmk);
-            for (Milestone resultMilestone : resultsMilestone) {
-                if (resultMilestone.getStatusRealisasi() == null) {
-                    milestoneRepo.delete(resultMilestone);
+            try {
+                //delete all relevant milestones
+                resultsMilestone = milestoneRepo.findByIdSPMK(idSpmk);
+                for (Milestone resultMilestone : resultsMilestone) {
+                    if (resultMilestone.getStatusRealisasi() == null) {
+                        milestoneRepo.delete(resultMilestone);
+                    }
                 }
+                //insert new milestones
+                for (Milestone toSave : listOfRencana) {
+                    Long highestId = milestoneRepo.findHighestID();
+                    if (highestId == null)
+                        highestId = 0L;
+                    toSave.setIdProgres(highestId+1);
+                    milestoneRepo.save(toSave);
+                }
+                baseResponse.setStatus(true);
+                baseResponse.setCode(HttpStatus.OK.value());
             }
-            //insert new milestones
-            milestoneRepo.save(listOfRencana);
-            baseResponse.setStatus(true);
-            baseResponse.setCode(HttpStatus.OK.value());
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         else {
             baseResponse.setStatus(false);
