@@ -9,4 +9,8 @@ echo "
       Access your new links:
       🌎 Web server: http://localhost:8080/
 ===================== 🚀 Done 🚀 ===================" && \
-docker-compose exec -d -T app gradle bootRun
+if [ "$1" != "background" ]; then
+  docker-compose exec app gradle bootRun
+else
+  docker-compose exec -d -T app gradle bootRun
+fi
