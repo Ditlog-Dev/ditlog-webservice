@@ -10,27 +10,23 @@ import java.util.Date;
 public class Milestone {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_PROGRES", unique = true, nullable = false)
-    private Long idProgres = 0L;
-
-    @Column(name = "ID_DETAIL")
-    private Long idDetail;
+    @Column(name = "ID_PROGRES")
+    private Long idProgres;
 
     @Column(name = "ID_SPMK")
     private Long idSPMK;
 
     @Column(name = "TGL_RENCANA")
-    private Date tglRencana = new Date();
+    private Date tglRencana;
 
     @Column(name = "TGL_REALISASI")
     private Date tglRealisasi;
 
     @Column(name = "PROS_RENCANA")
-    private String persentaseRencana;
+    private int persentaseRencana;
 
     @Column(name = "PROS_REALISASI")
-    private String persentaseRealisasi;
+    private int persentaseRealisasi;
 
     @Column(name = "KET_RENCANA")
     private String keteranganRencana;
@@ -38,13 +34,8 @@ public class Milestone {
     @Column(name = "KET_REALISASI")
     private String keteranganRealisasi;
 
-    @JsonIgnore
-    @Column(name = "TGL_BUAT")
-    private Date tglBuat;
-
-    @JsonIgnore
-    @Column(name = "TGL_UPDATE")
-    private Date tglUpdate;
+    @Column(name = "ALASAN_REJECT_RENCANA")
+    private String alasanReject;
 
     @Column(name = "ID_USER")
     private Long idUser;
@@ -55,24 +46,16 @@ public class Milestone {
     @Column(name = "STATUS_REALISASI")
     private String statusRealisasi;
 
+    public String getAlasanReject() {
+        return alasanReject;
+    }
+
     public Date getTglRencana() {
         return tglRencana;
     }
 
-    public Date getTglBuat() {
-        return tglBuat;
-    }
-
     public Date getTglRealisasi() {
         return tglRealisasi;
-    }
-
-    public Date getTglUpdate() {
-        return tglUpdate;
-    }
-
-    public Long getIdDetail() {
-        return idDetail;
     }
 
     public Long getIdProgres() {
@@ -95,11 +78,11 @@ public class Milestone {
         return keteranganRencana;
     }
 
-    public String getPersentaseRealisasi() {
+    public int getPersentaseRealisasi() {
         return persentaseRealisasi;
     }
 
-    public String getPersentaseRencana() {
+    public int getPersentaseRencana() {
         return persentaseRencana;
     }
 
@@ -111,8 +94,8 @@ public class Milestone {
         return statusRencana;
     }
 
-    public void setIdDetail(Long idDetail) {
-        this.idDetail = idDetail;
+    public void setAlasanReject(String alasanReject) {
+        this.alasanReject = alasanReject;
     }
 
     public void setIdProgres(Long idProgres) {
@@ -135,11 +118,11 @@ public class Milestone {
         this.keteranganRencana = keteranganRencana;
     }
 
-    public void setPersentaseRealisasi(String persentaseRealisasi) {
+    public void setPersentaseRealisasi(int persentaseRealisasi) {
         this.persentaseRealisasi = persentaseRealisasi;
     }
 
-    public void setPersentaseRencana(String persentaseRencana) {
+    public void setPersentaseRencana(int persentaseRencana) {
         this.persentaseRencana = persentaseRencana;
     }
 
@@ -151,10 +134,6 @@ public class Milestone {
         this.tglRencana = tglRencana;
     }
 
-    public void setTglBuat(Date tglBuat) {
-        this.tglBuat = tglBuat;
-    }
-
     public void setStatusRealisasi(String statusRealisasi) {
         this.statusRealisasi = statusRealisasi;
     }
@@ -163,15 +142,10 @@ public class Milestone {
         this.statusRencana = statusRencana;
     }
 
-    public void setTglUpdate(Date tglUpdate) {
-        this.tglUpdate = tglUpdate;
-    }
-
     @Override
     public String toString() {
         return "Milestone{" +
                 "idProgres=" + idProgres +
-                "idDetail=" + idDetail +
                 ", idSPMK=" + idSPMK +
                 ", tanggalRencana=" + tglRencana +
                 ", tanggalRealisasi=" + tglRealisasi +
@@ -181,7 +155,8 @@ public class Milestone {
                 ", ketRealisasi=" + keteranganRealisasi +
                 ", statusRencana=" + statusRencana +
                 ", statusRealisasi=" + statusRealisasi +
-                "idUser=" + idUser +
+                ", alasanReject=" + alasanReject +
+                ", idUser=" + idUser +
                 '}';
     }
 }
