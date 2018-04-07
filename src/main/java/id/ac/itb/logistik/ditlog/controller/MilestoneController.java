@@ -75,22 +75,6 @@ public class MilestoneController {
         return ResponseEntity.ok(baseResponse);
     }
 
-    @RequestMapping(value = "/rencana/{idProgres}", method = RequestMethod.DELETE)
-    public ResponseEntity<BaseResponse> delete(HttpServletRequest request,
-                                               @PathVariable("idProgres") Long idProgres) {
-        BaseResponse baseResponse = new BaseResponse();
-        baseResponse.setPayload(null);
-        User user = (User) request.getAttribute("user");
-
-        Milestone resultMilestone = milestoneRepo.findById(idProgres);
-        milestoneRepo.delete(resultMilestone);
-
-        baseResponse.setStatus(true);
-        baseResponse.setCode(HttpStatus.OK.value());
-
-        return ResponseEntity.ok(baseResponse);
-    }
-
     @RequestMapping(value = "/rencana/{idSpmk}/{status}", method = RequestMethod.PUT)
     public ResponseEntity<BaseResponse> update(HttpServletRequest request,
                                                 @RequestBody(required=false) Keterangan keterangan,
