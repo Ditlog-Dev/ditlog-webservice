@@ -1,6 +1,5 @@
 package id.ac.itb.logistik.ditlog.controller;
 
-import com.sun.xml.internal.ws.api.message.ExceptionHasMessage;
 import id.ac.itb.logistik.ditlog.model.*;
 import id.ac.itb.logistik.ditlog.repository.MilestoneRepository;
 import id.ac.itb.logistik.ditlog.repository.SPMKContractRepository;
