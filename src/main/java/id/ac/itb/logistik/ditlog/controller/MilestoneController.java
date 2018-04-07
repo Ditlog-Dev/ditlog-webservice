@@ -1,5 +1,6 @@
 package id.ac.itb.logistik.ditlog.controller;
 
+import com.sun.xml.internal.ws.api.message.ExceptionHasMessage;
 import id.ac.itb.logistik.ditlog.model.*;
 import id.ac.itb.logistik.ditlog.repository.MilestoneRepository;
 import id.ac.itb.logistik.ditlog.repository.SPMKContractRepository;
@@ -9,7 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.naming.AuthenticationException;
+import javax.persistence.Entity;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Null;
@@ -27,7 +31,7 @@ public class MilestoneController {
 
     Map<Long,String> ROLE = RoleConstant.ROLE;
 
-    class Keterangan {
+    static public class Keterangan {
         public String ket;
 
         public String getKet() {
@@ -39,12 +43,10 @@ public class MilestoneController {
         }
     }
 
-    class rencanaList extends ArrayList<Milestone> {}
-
     @GetMapping("/rencana/{idSpmk}")
     public ResponseEntity<BaseResponse> getByIdSpmk(HttpServletRequest request,
                                                     @PathVariable("idSpmk") Long idSpmk
-                                                    ) {
+                                                    ) throws AuthenticationException {
         BaseResponse baseResponse = new BaseResponse();
         User user = (User) request.getAttribute("user");
         ArrayList<Milestone> results = new ArrayList<Milestone>();
@@ -67,65 +69,55 @@ public class MilestoneController {
             baseResponse.setPayload(results);
         }
         else {
-            baseResponse.setStatus(false);
-            baseResponse.setCode(HttpStatus.FORBIDDEN.value());
-            baseResponse.setMessage("UNAUTHORIZED ACCESS");
+            throw new AuthenticationException("Unauthorized Access");
         }
 
         return ResponseEntity.ok(baseResponse);
     }
 
-    @RequestMapping(value = "/rencana/{idSpmk}/{status}", method = RequestMethod.POST)
+    @RequestMapping(value = "/rencana/{idSpmk}/{status}", method = RequestMethod.PUT)
     public ResponseEntity<BaseResponse> update(HttpServletRequest request,
-                                                @RequestBody Keterangan keterangan,
+                                                @RequestBody(required=false) Keterangan keterangan,
                                                 @PathVariable("idSpmk") Long idSpmk,
-                                               @PathVariable("status") String status) {
+                                               @PathVariable("status") String status) throws Exception {
         BaseResponse baseResponse = new BaseResponse();
-//        User user = (User) request.getAttribute("user");
-//
-//        if (!status.equals("1") && !status.equals("0")) {
-//            baseResponse.setStatus(false);
-//            baseResponse.setMessage("Wrong status, 0 for rejected, 1 for accepted");
-//            baseResponse.setCode(HttpStatus.BAD_REQUEST.value());
-//            return ResponseEntity.ok(baseResponse);
-//        }
-//
-//        if (!Pattern.matches("[a-zA-Z0-9\\s\\-]{1,50}", keterangan.ket)) {
-//            baseResponse.setStatus(false);
-//            baseResponse.setMessage("Wrong ketarangan");
-//            baseResponse.setCode(HttpStatus.BAD_REQUEST.value());
-//            return ResponseEntity.ok(baseResponse);
-//        }
-//
-//        Iterable<Milestone> resultsMilestone = new Iterable<Milestone>() {
-//            @Override
-//            public Iterator<Milestone> iterator() { return null; }
-//        };
-//
-//        if (ROLE.get(user.getIdResponsibility()).equals("PEMERIKSA_JASA")) {
-//            resultsMilestone = milestoneRepo.findByIdSPMK(idSpmk);
-//            for (Milestone resultMilestone : resultsMilestone) {
-//                if (resultMilestone.getStatusRealisasi() == null) {
-//                    resultMilestone.setStatusRencana(status);
-//                    resultMilestone.setAlasanReject(keterangan.ket);
-//                    milestoneRepo.save(resultMilestone);
-//                }
-//            }
-//            baseResponse.setStatus(true);
-//            baseResponse.setCode(HttpStatus.OK.value());
-//        }
-//        else {
-//            baseResponse.setStatus(false);
-//            baseResponse.setMessage("Unauthorized access");
-//            baseResponse.setCode(HttpStatus.FORBIDDEN.value());
-//        }
+        User user = (User) request.getAttribute("user");
+
+        if (!status.equals("1") && !status.equals("0")) {
+            throw new Exception("Wrong status, 0 for rejected, 1 for accepted");
+        }
+        
+        if (!Pattern.matches("[a-zA-Z0-9\\s\\-]{1,50}", keterangan.ket)) {
+            throw new Exception("Wrong ketarangan");
+        }
+
+        Iterable<Milestone> resultsMilestone = new Iterable<Milestone>() {
+            @Override
+            public Iterator<Milestone> iterator() { return null; }
+        };
+
+        if (ROLE.get(user.getIdResponsibility()).equals("PEMERIKSA_JASA")) {
+            resultsMilestone = milestoneRepo.findByIdSPMK(idSpmk);
+            for (Milestone resultMilestone : resultsMilestone) {
+                if (resultMilestone.getStatusRealisasi() == null) {
+                    resultMilestone.setStatusRencana(status);
+                    resultMilestone.setAlasanReject(keterangan.ket);
+                    milestoneRepo.save(resultMilestone);
+                }
+            }
+            baseResponse.setStatus(true);
+            baseResponse.setCode(HttpStatus.OK.value());
+        }
+        else {
+            throw new AuthenticationException("Unauthorized Access");
+        }
         return ResponseEntity.ok(baseResponse);
     }
 
     @RequestMapping(value = "/rencana/{idSpmk}", method = RequestMethod.POST)
     public ResponseEntity<BaseResponse> insert(HttpServletRequest request,
                                                @RequestBody Milestone[] listOfRencana,
-                                               @PathVariable("idSpmk") Long idSpmk) {
+                                               @PathVariable("idSpmk") Long idSpmk) throws Exception {
         BaseResponse baseResponse = new BaseResponse();
         User user = (User) request.getAttribute("user");
 
@@ -133,10 +125,7 @@ public class MilestoneController {
         for (Milestone rencana : listOfRencana) {
             if (rencana.getStatusRencana() != null ||
                     rencana.getStatusRealisasi() != null) {
-                baseResponse.setStatus(false);
-                baseResponse.setMessage("Wrong input rencana");
-                baseResponse.setCode(HttpStatus.BAD_REQUEST.value());
-                return ResponseEntity.ok(baseResponse);
+                throw new Exception("Wrong input rencana");
             }
         }
 
@@ -170,9 +159,7 @@ public class MilestoneController {
             }
         }
         else {
-            baseResponse.setStatus(false);
-            baseResponse.setMessage("Unauthorized access");
-            baseResponse.setCode(HttpStatus.FORBIDDEN.value());
+            throw new AuthenticationException("Unauthorized Access");
         }
         return ResponseEntity.ok(baseResponse);
     }
