@@ -86,10 +86,6 @@ public class MilestoneController {
         if (!status.equals("1") && !status.equals("0")) {
             throw new Exception("Wrong status, 0 for rejected, 1 for accepted");
         }
-        
-        if (!Pattern.matches("[a-zA-Z0-9\\s\\-]{1,50}", keterangan.ket)) {
-            throw new Exception("Wrong ketarangan");
-        }
 
         Iterable<Milestone> resultsMilestone = new Iterable<Milestone>() {
             @Override
@@ -101,7 +97,8 @@ public class MilestoneController {
             for (Milestone resultMilestone : resultsMilestone) {
                 if (resultMilestone.getStatusRealisasi() == null) {
                     resultMilestone.setStatusRencana(status);
-                    resultMilestone.setAlasanReject(keterangan.ket);
+                    if (keterangan != null)
+                        resultMilestone.setAlasanReject(keterangan.ket);
                     milestoneRepo.save(resultMilestone);
                 }
             }
