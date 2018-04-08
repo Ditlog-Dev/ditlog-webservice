@@ -58,7 +58,6 @@ public class DitlogContractTests extends BaseTest {
             e.printStackTrace();
         }
         contractBarang.setTanggalKontrak(date);
-//        contractBarang.setTahun(2018L);
         contractBarang.setJenis("BARANG");
         contractRepository.save(contractBarang);
         contractJasa = new SPMKContract();
@@ -71,7 +70,6 @@ public class DitlogContractTests extends BaseTest {
             e.printStackTrace();
         }
         contractJasa.setTanggalKontrak(date);
-//        contractJasa.setTahun(2017L);
         contractJasa.setJenis("JASA");
         contractRepository.save(contractJasa);
         jsonContractBarang = mapper.writeValueAsString(contractBarang);

@@ -82,7 +82,7 @@ public class PenilaianController {
 
 
     @PutMapping("/contracts/{id}/indicators")
-    public ResponseEntity<BaseResponse> updateIndicator(
+    public ResponseEntity<BaseResponse> updateIndicatorOnContract(
             HttpServletRequest request,
             @PathVariable("id") Long id,
             @RequestBody ArrayList<PenilaianKinerja> penilaianKinerjaList
@@ -107,6 +107,35 @@ public class PenilaianController {
         baseResponse.setStatus(true);
         baseResponse.setCode(HttpStatus.OK.value());
         baseResponse.setPayload(penilaianKinerjaList);
+
+        return ResponseEntity.ok(baseResponse);
+    }
+
+    @DeleteMapping("/contracts/{id}/indicators/{indicatorId}")
+    public ResponseEntity<BaseResponse> deleteIndicatorOnContract(
+            HttpServletRequest request,
+            @PathVariable("id") Long id,
+            @PathVariable("indicatorId") Long indicatorId
+    ){
+        BaseResponse baseResponse = new BaseResponse();
+        User user = (User) request.getAttribute("user");
+        Long roleId = user.getIdResponsibility();
+        SPMKContract contract = spmkContractRepository.findContractById(id);
+        if(!ROLE.get(roleId).equals("KASUBDIT_PEMERIKSA") && !contract.getJenis().equals(TAG.get(roleId))){
+            throw new EntityNotFoundException(SPMKContract.class.getSimpleName());
+        }
+        if(contract == null){
+            throw new EntityNotFoundException(SPMKContract.class.getSimpleName());
+        }
+        PenilaianIdentity penilaianIdentity = new PenilaianIdentity(id,indicatorId);
+        PenilaianKinerja penilaianKinerja = penilaianRepository.findOne(penilaianIdentity);
+        if(penilaianKinerja == null){
+            throw new EntityNotFoundException(PenilaianKinerja.class.getSimpleName());
+        }
+        penilaianRepository.delete(penilaianIdentity);
+        baseResponse.setStatus(true);
+        baseResponse.setCode(HttpStatus.OK.value());
+        baseResponse.setPayload(penilaianKinerja);
 
         return ResponseEntity.ok(baseResponse);
     }
