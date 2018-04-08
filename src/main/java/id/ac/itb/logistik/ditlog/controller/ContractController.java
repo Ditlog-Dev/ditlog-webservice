@@ -20,8 +20,6 @@ import java.util.Map;
 public class ContractController {
     @Autowired
     SPMKContractRepository spmkContractRepository;
-    @Autowired
-    PenilaianRepository penilaianRepository;
     Map<Long,String> ROLE = RoleConstant.ROLE;
     Map<Long,String> TAG = RoleConstant.TAG;
 
@@ -84,62 +82,6 @@ public class ContractController {
         baseResponse.setStatus(true);
         baseResponse.setCode(HttpStatus.OK.value());
         baseResponse.setPayload(contract);
-
-        return ResponseEntity.ok(baseResponse);
-    }
-
-
-    @GetMapping("/contracts/{id}/indicators")
-    public ResponseEntity<BaseResponse> getIndicatorByIdContract(
-            HttpServletRequest request,
-            @PathVariable("id") Long id
-    ) {
-        BaseResponse baseResponse = new BaseResponse();
-        User user = (User) request.getAttribute("user");
-        Long roleId = user.getIdResponsibility();
-        SPMKContract contract = spmkContractRepository.findContractById(id);
-        if(!ROLE.get(roleId).equals("KASUBDIT_PEMERIKSA") && !contract.getJenis().equals(TAG.get(roleId))){
-            throw new EntityNotFoundException(SPMKContract.class.getSimpleName());
-        }
-        if(contract == null){
-            throw new EntityNotFoundException(SPMKContract.class.getSimpleName());
-        }
-        Iterable<PenilaianKinerja> penilaianKinerjaIterable = penilaianRepository.findAllByIdContract(id);
-        if(penilaianKinerjaIterable.spliterator().getExactSizeIfKnown() == 0){
-            throw new EntityNotFoundException(PenilaianKinerja.class.getSimpleName());
-        }
-        baseResponse.setStatus(true);
-        baseResponse.setCode(HttpStatus.OK.value());
-        baseResponse.setPayload(penilaianKinerjaIterable);
-
-        return ResponseEntity.ok(baseResponse);
-    }
-
-    @PostMapping("/contracts/{id}/indicators")
-    public ResponseEntity<BaseResponse> addPenilaian(
-            HttpServletRequest request,
-            @PathVariable("id") Long id,
-            @RequestBody ArrayList<Long> indicatorIdList
-    ) {
-        BaseResponse baseResponse = new BaseResponse();
-        User user = (User) request.getAttribute("user");
-        Long roleId = user.getIdResponsibility();
-        SPMKContract contract = spmkContractRepository.findContractById(id);
-        if(!ROLE.get(roleId).equals("KASUBDIT_PEMERIKSA") && !contract.getJenis().equals(TAG.get(roleId))){
-            throw new EntityNotFoundException(SPMKContract.class.getSimpleName());
-        }
-        if(contract == null){
-            throw new EntityNotFoundException(SPMKContract.class.getSimpleName());
-        }
-        List<PenilaianKinerja> penilaianKinerjaList = new ArrayList<>();
-        for (Long indicatorId:indicatorIdList) {
-            PenilaianKinerja penilaianKinerja = new PenilaianKinerja(new PenilaianIdentity(id,indicatorId));
-            penilaianKinerjaList.add(penilaianKinerja);
-        }
-        penilaianRepository.save(penilaianKinerjaList);
-        baseResponse.setStatus(true);
-        baseResponse.setCode(HttpStatus.OK.value());
-        baseResponse.setPayload(penilaianKinerjaList);
 
         return ResponseEntity.ok(baseResponse);
     }
