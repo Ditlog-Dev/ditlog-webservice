@@ -17,6 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 @RunWith(SpringRunner.class)
@@ -41,15 +45,32 @@ public class DitlogContractTests extends BaseTest {
         if (setUpIsDone) {
             return;
         }
+        String dateString;
+        Date date = new Date();
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         contractBarang = new SPMKContract();
         contractBarang.setIdKontrak(1L);
         contractBarang.setNoKontrak("1234");
+        dateString = "2018-09-09";
+        try {
+            date = formatter.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        contractBarang.setTanggalKontrak(date);
 //        contractBarang.setTahun(2018L);
         contractBarang.setJenis("BARANG");
         contractRepository.save(contractBarang);
         contractJasa = new SPMKContract();
         contractJasa.setIdKontrak(2L);
         contractJasa.setNoKontrak("1234");
+        dateString = "2017-09-09";
+        try {
+            date = formatter.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        contractJasa.setTanggalKontrak(date);
 //        contractJasa.setTahun(2017L);
         contractJasa.setJenis("JASA");
         contractRepository.save(contractJasa);

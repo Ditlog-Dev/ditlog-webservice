@@ -80,7 +80,7 @@ public class DitlogIndicatorTests extends BaseTest {
     Assert.assertEquals(HttpStatus.OK.value(), response.getStatusCodeValue());
     JSONAssert.assertEquals(
             jsonIndicator,
-            result.getJSONObject("payload").getJSONArray("content").getJSONObject(0),
+            result.getJSONArray("payload").getJSONObject(0),
             false);
   }
   @Test
