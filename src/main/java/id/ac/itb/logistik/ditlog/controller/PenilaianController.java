@@ -48,7 +48,6 @@ public class PenilaianController {
             throw new EntityNotFoundException(PenilaianKinerja.class.getSimpleName());
         }
         List<PenilaianKinerja> penilaianKinerjaList = new ArrayList<>();
-//        penilaianKinerjaIterable.iterator().forEachRemaining(penilaianKinerjaList::add);
         for(PenilaianKinerja penilaianKinerja:penilaianKinerjaIterable) {
             penilaianKinerja.setIdIndicator();
             Indicator indicator = indicatorRepository.findOne(penilaianKinerja.penilaianIdentity.getIdIndikator());
@@ -71,7 +70,7 @@ public class PenilaianController {
             HttpServletRequest request,
             @PathVariable("id") Long id,
             @RequestBody ArrayList<Long> indicatorIdList
-    ) {
+    ) throws NotFoundException {
         BaseResponse baseResponse = new BaseResponse();
         User user = (User) request.getAttribute("user");
         Long roleId = user.getIdResponsibility();
@@ -87,7 +86,18 @@ public class PenilaianController {
             PenilaianKinerja penilaianKinerja = new PenilaianKinerja(new PenilaianIdentity(id,indicatorId));
             penilaianKinerjaList.add(penilaianKinerja);
         }
-        penilaianRepository.save(penilaianKinerjaList);
+        Iterable<PenilaianKinerja> penilaianKinerjaIterable = penilaianRepository.save(penilaianKinerjaList);
+
+        penilaianKinerjaList = new ArrayList<>();
+        for(PenilaianKinerja penilaianKinerja:penilaianKinerjaIterable) {
+            penilaianKinerja.setIdIndicator();
+            Indicator indicator = indicatorRepository.findOne(penilaianKinerja.penilaianIdentity.getIdIndikator());
+            if(indicator == null){
+                throw new NotFoundException(Indicator.class.getSimpleName());
+            }
+            penilaianKinerja.setNamaIndikator(indicator.getName());
+            penilaianKinerjaList.add(penilaianKinerja);
+        }
         baseResponse.setStatus(true);
         baseResponse.setCode(HttpStatus.OK.value());
         baseResponse.setPayload(penilaianKinerjaList);
@@ -100,7 +110,7 @@ public class PenilaianController {
     public ResponseEntity<BaseResponse> updateIndicatorOnContract(
             HttpServletRequest request,
             @PathVariable("id") Long id,
-            @RequestBody ArrayList<PenilaianKinerja> penilaianKinerjaList
+            @RequestBody ArrayList<PenilaianSimplified> penilaianList
     ) {
         BaseResponse baseResponse = new BaseResponse();
         User user = (User) request.getAttribute("user");
@@ -113,15 +123,24 @@ public class PenilaianController {
             throw new EntityNotFoundException(SPMKContract.class.getSimpleName());
         }
         List<PenilaianKinerja> penilaianKinerjaUpdateList = new ArrayList<>();
-        for (PenilaianKinerja penilaianKinerja : penilaianKinerjaList) {
-            PenilaianKinerja penilaianKinerjaUpdate = penilaianRepository.findOne(penilaianKinerja.penilaianIdentity);
+        for (PenilaianSimplified penilaian : penilaianList) {
+            PenilaianKinerja penilaianKinerjaUpdate = penilaianRepository.findOne(new PenilaianIdentity(id,penilaian.getIdIndikator()));
+            if(penilaianKinerjaUpdate == null){
+                throw new EntityNotFoundException(PenilaianKinerja.class.getSimpleName());
+            }
+            penilaianKinerjaUpdate.setNilai(penilaian.getNilai());
             penilaianKinerjaUpdate.setIdIndicator();
+            Indicator indicator = indicatorRepository.findOne(penilaian.getIdIndikator());
+            if(indicator == null){
+                throw new EntityNotFoundException(Indicator.class.getSimpleName());
+            }
+            penilaianKinerjaUpdate.setNamaIndikator(indicator.getName());
             penilaianKinerjaUpdateList.add(penilaianKinerjaUpdate);
         }
         penilaianRepository.save(penilaianKinerjaUpdateList);
         baseResponse.setStatus(true);
         baseResponse.setCode(HttpStatus.OK.value());
-        baseResponse.setPayload(penilaianKinerjaList);
+        baseResponse.setPayload(penilaianKinerjaUpdateList);
 
         return ResponseEntity.ok(baseResponse);
     }
@@ -147,7 +166,13 @@ public class PenilaianController {
         if(penilaianKinerja == null){
             throw new EntityNotFoundException(PenilaianKinerja.class.getSimpleName());
         }
+        Indicator indicator = indicatorRepository.findOne(penilaianIdentity.getIdIndikator());
+        if(indicator == null){
+            throw new EntityNotFoundException(Indicator.class.getSimpleName());
+        }
         penilaianRepository.delete(penilaianIdentity);
+        penilaianKinerja.setIdIndicator();
+        penilaianKinerja.setNamaIndikator(indicator.getName());
         baseResponse.setStatus(true);
         baseResponse.setCode(HttpStatus.OK.value());
         baseResponse.setPayload(penilaianKinerja);
