@@ -44,13 +44,13 @@ public class DitlogContractTests extends BaseTest {
         contractBarang = new SPMKContract();
         contractBarang.setIdKontrak(1L);
         contractBarang.setNoKontrak("1234");
-        contractBarang.setTahun(2018L);
+//        contractBarang.setTahun(2018L);
         contractBarang.setJenis("BARANG");
         contractRepository.save(contractBarang);
         contractJasa = new SPMKContract();
         contractJasa.setIdKontrak(2L);
         contractJasa.setNoKontrak("1234");
-        contractJasa.setTahun(2017L);
+//        contractJasa.setTahun(2017L);
         contractJasa.setJenis("JASA");
         contractRepository.save(contractJasa);
         jsonContractBarang = mapper.writeValueAsString(contractBarang);
