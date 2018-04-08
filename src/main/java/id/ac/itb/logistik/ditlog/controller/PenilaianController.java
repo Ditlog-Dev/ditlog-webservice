@@ -145,6 +145,60 @@ public class PenilaianController {
         return ResponseEntity.ok(baseResponse);
     }
 
+
+    @DeleteMapping("/contracts/{id}/indicators")
+    public ResponseEntity<BaseResponse> deleteIndicatorListOnContract(
+            HttpServletRequest request,
+            @PathVariable("id") Long id,
+            @RequestBody ArrayList<Long> indicatorIdList
+    ){
+        BaseResponse baseResponse = new BaseResponse();
+        User user = (User) request.getAttribute("user");
+        Long roleId = user.getIdResponsibility();
+        SPMKContract contract = spmkContractRepository.findContractById(id);
+        if(!ROLE.get(roleId).equals("KASUBDIT_PEMERIKSA") && !contract.getJenis().equals(TAG.get(roleId))){
+            throw new EntityNotFoundException(SPMKContract.class.getSimpleName());
+        }
+        if(contract == null){
+            throw new EntityNotFoundException(SPMKContract.class.getSimpleName());
+        }
+        String msg = "Some penilaian has been deleted. These id are : ";
+        String msg2 = "Some indicator couldn't seen in db. These id are : ";
+        boolean msg_flag = false, msg2_flag = false;
+        List<PenilaianKinerja> penilaianKinerjaList = new ArrayList<>();
+        for(Long indicatorId:indicatorIdList){
+            PenilaianIdentity penilaianIdentity = new PenilaianIdentity(id,indicatorId);
+            PenilaianKinerja penilaianKinerja = penilaianRepository.findOne(penilaianIdentity);
+            if(penilaianKinerja == null){
+                msg_flag = true;
+                msg += indicatorId.toString() + " ";
+                continue;
+            }
+            Indicator indicator = indicatorRepository.findOne(indicatorId);
+            if(indicator == null){
+                msg2_flag = true;
+                msg2 += indicatorId.toString() + " ";
+                continue;
+            }
+            penilaianKinerja.setIdIndicator();
+            penilaianKinerja.setNamaIndikator(indicator.getName());
+            penilaianKinerjaList.add(penilaianKinerja);
+            penilaianRepository.delete(penilaianIdentity);
+        }
+        if(penilaianKinerjaList.isEmpty()){
+            throw new EntityNotFoundException(PenilaianKinerja.class.getSimpleName());
+        }
+        baseResponse.setStatus(true);
+        baseResponse.setCode(HttpStatus.OK.value());
+        String msg_final = "";
+        if(msg_flag) msg_final += msg;
+        if(msg2_flag) msg_final += ". " + msg2;
+        if(msg_flag || msg2_flag) baseResponse.setMessage(msg_final);
+        baseResponse.setPayload(penilaianKinerjaList);
+
+        return ResponseEntity.ok(baseResponse);
+    }
+
     @DeleteMapping("/contracts/{id}/indicators/{indicatorId}")
     public ResponseEntity<BaseResponse> deleteIndicatorOnContract(
             HttpServletRequest request,

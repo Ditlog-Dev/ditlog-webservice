@@ -15,11 +15,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -50,19 +48,9 @@ public class DitlogPenilaianTests extends BaseTest{
         if (setUpIsDone) {
             return;
         }
-        String dateString;
-        Date date = new Date();
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         contract = new SPMKContract();
-        contract.setIdKontrak(5L);
+        contract.setIdKontrak(1L);
         contract.setNoKontrak("1234");
-        dateString = "2018-09-09";
-        try {
-            date = formatter.parse(dateString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        contract.setTanggalKontrak(date);
         contract.setJenis("BARANG");
         spmkContractRepository.save(contract);
 
@@ -78,8 +66,8 @@ public class DitlogPenilaianTests extends BaseTest{
         userKasubdit = new User("john kasubdit", RoleConstant.KASUBDIT_PEMERIKSA);
         userRepo.save(userKasubdit);
 
-        penilaianKinerja1 = new PenilaianKinerja(new PenilaianIdentity(5L,1L));
-        penilaianKinerja2 = new PenilaianKinerja(new PenilaianIdentity(5L,2L));
+        penilaianKinerja1 = new PenilaianKinerja(new PenilaianIdentity(1L,1L));
+        penilaianKinerja2 = new PenilaianKinerja(new PenilaianIdentity(1L,2L));
 
         bearerAuth = TokenAuthenticationService.TOKEN_PREFIX + " " + TokenAuthenticationService.getJWT(userKasubdit);
         setUpIsDone = true;
@@ -103,19 +91,65 @@ public class DitlogPenilaianTests extends BaseTest{
     // Update
     // Delete
 
+//    @Test
+//    @Transactional
+//    public void addPenilaian() throws JSONException {
+//        List<Long> indicatorIdList = new ArrayList<>();
+//        indicatorIdList.add(1L);
+//        indicatorIdList.add(2L);
+//        HttpEntity<List<Long>> entity = new HttpEntity<>(indicatorIdList, headers);
+//        ResponseEntity<String> response =
+//                restTemplate.postForEntity(createURLWithPort("/contracts/"+contract.getIdKontrak()+"/indicators"), entity, String.class);
+//        JSONObject result = new JSONObject(response.getBody());
+//
+//        // Assertion
+//        Assert.assertEquals(HttpStatus.OK.value(), response.getStatusCodeValue());
+//        Assert.assertEquals(2,result.getJSONArray("payload").length());
+//    }
+//
+//
+//    public void addAndUpdatePenilaian() throws JSONException {
+//        List<Long> indicatorIdList = new ArrayList<>();
+//        indicatorIdList.add(1L);
+//        indicatorIdList.add(2L);
+//        HttpEntity<List<Long>> entity = new HttpEntity<>(indicatorIdList, headers);
+//        ResponseEntity<String> response =
+//                restTemplate.postForEntity(createURLWithPort("/contracts/"+contract.getIdKontrak()+"/indicators"), entity, String.class);
+//        JSONObject result = new JSONObject(response.getBody());
+//
+//        // Assertion
+//        Assert.assertEquals(HttpStatus.OK.value(), response.getStatusCodeValue());
+//        Assert.assertEquals(2,result.getJSONArray("payload").length());
+//
+//
+//        PenilaianSimplified penilaian = new PenilaianSimplified();
+//        penilaian.setIdIndikator(1L);
+//        penilaian.setNilai(BigDecimal.valueOf(10));
+//        List<PenilaianSimplified> penilaianList = new ArrayList<>();
+//        penilaianList.add(penilaian);
+//        HttpEntity<List<PenilaianSimplified>> entity2 = new HttpEntity<>(penilaianList, headers);
+//        ResponseEntity<String> response2 =
+//                restTemplate.exchange(createURLWithPort("/contracts/"+contract.getIdKontrak()+"/indicators"), HttpMethod.PUT, entity2, String.class);
+//        JSONObject result2 = new JSONObject(response2.getBody());
+//
+//        Assert.assertEquals(HttpStatus.OK.value(), response2.getStatusCodeValue());
+//        Assert.assertEquals(1,result2.getJSONArray("payload").length());
+//
+//    }
 
     @Test
-    public void addPenilaian() throws JSONException {
-        List<Long> indicatorIdList = new ArrayList<>();
-        indicatorIdList.add(1L);
-        indicatorIdList.add(2L);
-        HttpEntity<List<Long>> entity = new HttpEntity<>(indicatorIdList, headers);
+    @Transactional
+    public void updatePenilaian() {
+        PenilaianSimplified penilaian = new PenilaianSimplified();
+        penilaian.setIdIndikator(1L);
+        penilaian.setNilai(BigDecimal.valueOf(10));
+        List<PenilaianSimplified> penilaianList = new ArrayList<>();
+        penilaianList.add(penilaian);
+        HttpEntity<List<PenilaianSimplified>> entity = new HttpEntity<>(penilaianList, headers);
         ResponseEntity<String> response =
-                restTemplate.postForEntity(createURLWithPort("/contracts/"+contract.getIdKontrak()+"/indicators"), entity, String.class);
-        JSONObject result = new JSONObject(response.getBody());
+                restTemplate.exchange(createURLWithPort("/contracts/"+contract.getIdKontrak()+"/indicators"), HttpMethod.PUT, entity, String.class);
 
         // Assertion
-        Assert.assertEquals(HttpStatus.OK.value(), response.getStatusCodeValue());
-        Assert.assertEquals(2,result.getJSONArray("payload").length());
+        Assert.assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatusCodeValue());
     }
 }
