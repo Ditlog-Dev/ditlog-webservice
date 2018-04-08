@@ -65,9 +65,6 @@ public class SPMKContract {
   @Transient
   private BigDecimal nilaiRataRata = BigDecimal.ZERO;
 
-  @Transient
-  private List<PenilaianKinerja> penilaianKinerjaList = new ArrayList<>();
-
   public SPMKContract() {
   }
 
@@ -214,12 +211,4 @@ public class SPMKContract {
   public void setNilaiRataRata(BigDecimal nilaiRataRata) {
     this.nilaiRataRata = nilaiRataRata;
   }
-
-    public List<PenilaianKinerja> getPenilaianKinerjaList() {
-        return penilaianKinerjaList;
-    }
-
-    public void setPenilaianKinerjaList(List<PenilaianKinerja> penilaianKinerjaList) {
-        this.penilaianKinerjaList = penilaianKinerjaList;
-    }
 }
