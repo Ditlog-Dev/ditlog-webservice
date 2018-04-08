@@ -5,13 +5,13 @@ import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
-//@Embeddable
+@Embeddable
 public class PenilaianIdentity implements Serializable {
-    @NotNull
+//    @NotNull
     @Column(name = "ID_KONTRAK")
     private Long idKontrak;
 
-    @NotNull
+//    @NotNull
     @Column(name = "ID_INDIKATOR")
     private Long idIndikator;
 

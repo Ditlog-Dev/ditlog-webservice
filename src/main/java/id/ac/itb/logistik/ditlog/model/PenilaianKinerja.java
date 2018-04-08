@@ -11,15 +11,18 @@ import java.util.Date;
 @Table(name = "PENILAIAN_KINERJA")
 public class PenilaianKinerja implements Serializable{
 
-    @Id
-    @Column(name = "ROWID")
-    public String id;
+//    @Id
+//    @Column(name = "ROWID")
+//    public String id;
 
-    @Column(name = "ID_KONTRAK")
-    private Long idKontrak = 0L;
+    @EmbeddedId
+    public PenilaianIdentity penilaianIdentity;
 
-    @Column(name = "ID_INDIKATOR")
-    private Long idIndikator = 0L;
+//    @Column(name = "ID_KONTRAK")
+//    private Long idKontrak = 0L;
+//
+//    @Column(name = "ID_INDIKATOR")
+//    private Long idIndikator = 0L;
 
     @Column(name = "NILAI")
     private BigDecimal nilai = BigDecimal.ZERO;
@@ -36,27 +39,31 @@ public class PenilaianKinerja implements Serializable{
     public PenilaianKinerja() {
     }
 
-    public PenilaianKinerja(Long idKontrak, Long idIndikator, BigDecimal nilai) {
-        this.idKontrak = idKontrak;
-        this.idIndikator = idIndikator;
-        this.nilai = nilai;
+    public PenilaianKinerja(PenilaianIdentity penilaianIdentity) {
+        this.penilaianIdentity = penilaianIdentity;
     }
 
-    public Long getIdKontrak() {
-        return idKontrak;
-    }
-
-    public void setIdKontrak(Long idKontrak) {
-        this.idKontrak = idKontrak;
-    }
-
-    public Long getIdIndikator() {
-        return idIndikator;
-    }
-
-    public void setIdIndikator(Long idIndikator) {
-        this.idIndikator = idIndikator;
-    }
+    //    public PenilaianKinerja(Long idKontrak, Long idIndikator, BigDecimal nilai) {
+//        this.idKontrak = idKontrak;
+//        this.idIndikator = idIndikator;
+//        this.nilai = nilai;
+//    }
+//
+//    public Long getIdKontrak() {
+//        return idKontrak;
+//    }
+//
+//    public void setIdKontrak(Long idKontrak) {
+//        this.idKontrak = idKontrak;
+//    }
+//
+//    public Long getIdIndikator() {
+//        return idIndikator;
+//    }
+//
+//    public void setIdIndikator(Long idIndikator) {
+//        this.idIndikator = idIndikator;
+//    }
 
     public BigDecimal getNilai() {
         return nilai;
@@ -88,13 +95,5 @@ public class PenilaianKinerja implements Serializable{
 
     public void setIdUser(Long idUser) {
         this.idUser = idUser;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 }

@@ -105,6 +105,9 @@ public class ContractController {
             throw new EntityNotFoundException(SPMKContract.class.getSimpleName());
         }
         Iterable<PenilaianKinerja> penilaianKinerjaIterable = penilaianRepository.findAllByIdContract(id);
+        if(penilaianKinerjaIterable.spliterator().getExactSizeIfKnown() == 0){
+            throw new EntityNotFoundException(PenilaianKinerja.class.getSimpleName());
+        }
         baseResponse.setStatus(true);
         baseResponse.setCode(HttpStatus.OK.value());
         baseResponse.setPayload(penilaianKinerjaIterable);
@@ -130,14 +133,10 @@ public class ContractController {
         }
         List<PenilaianKinerja> penilaianKinerjaList = new ArrayList<>();
         for (Long indicatorId:indicatorIdList) {
-//            penilaianRepository.saveCustom(id,indicatorId,BigDecimal.ZERO);
-//            PenilaianKinerja penilaianKinerja = new PenilaianKinerja(id,indicatorId, BigDecimal.ZERO);
-//            penilaianKinerja.id = "qqq" + indicatorId.toString();
-//            penilaianRepository.save(penilaianKinerja);
-            penilaianKinerjaList.add(new PenilaianKinerja(id,indicatorId, BigDecimal.ZERO));
-
+            PenilaianKinerja penilaianKinerja = new PenilaianKinerja(new PenilaianIdentity(id,indicatorId));
+            penilaianKinerjaList.add(penilaianKinerja);
         }
-//        penilaianRepository.save(penilaianKinerjaList);
+        penilaianRepository.save(penilaianKinerjaList);
         baseResponse.setStatus(true);
         baseResponse.setCode(HttpStatus.OK.value());
         baseResponse.setPayload(penilaianKinerjaList);
