@@ -38,4 +38,12 @@ public class PenilaianIdentity implements Serializable {
     public void setIdIndikator(Long idIndikator) {
         this.idIndikator = idIndikator;
     }
+
+    @Override
+    public String toString() {
+        return "PenilaianIdentity{" +
+                "idKontrak=" + idKontrak +
+                ", idIndikator=" + idIndikator +
+                '}';
+    }
 }

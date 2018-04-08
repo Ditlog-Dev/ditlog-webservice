@@ -1,8 +1,10 @@
 package id.ac.itb.logistik.ditlog.controller;
 
 import id.ac.itb.logistik.ditlog.model.*;
+import id.ac.itb.logistik.ditlog.repository.IndicatorRepository;
 import id.ac.itb.logistik.ditlog.repository.PenilaianRepository;
 import id.ac.itb.logistik.ditlog.repository.SPMKContractRepository;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,8 @@ public class PenilaianController {
     SPMKContractRepository spmkContractRepository;
     @Autowired
     PenilaianRepository penilaianRepository;
+    @Autowired
+    IndicatorRepository indicatorRepository;
     Map<Long,String> ROLE = RoleConstant.ROLE;
     Map<Long,String> TAG = RoleConstant.TAG;
 
@@ -28,7 +32,7 @@ public class PenilaianController {
     public ResponseEntity<BaseResponse> getIndicatorByIdContract(
             HttpServletRequest request,
             @PathVariable("id") Long id
-    ) {
+    ) throws NotFoundException {
         BaseResponse baseResponse = new BaseResponse();
         User user = (User) request.getAttribute("user");
         Long roleId = user.getIdResponsibility();
@@ -43,9 +47,20 @@ public class PenilaianController {
         if(penilaianKinerjaIterable.spliterator().getExactSizeIfKnown() == 0){
             throw new EntityNotFoundException(PenilaianKinerja.class.getSimpleName());
         }
+        List<PenilaianKinerja> penilaianKinerjaList = new ArrayList<>();
+//        penilaianKinerjaIterable.iterator().forEachRemaining(penilaianKinerjaList::add);
+        for(PenilaianKinerja penilaianKinerja:penilaianKinerjaIterable) {
+            penilaianKinerja.setIdIndicator();
+            Indicator indicator = indicatorRepository.findOne(penilaianKinerja.penilaianIdentity.getIdIndikator());
+            if(indicator == null){
+                throw new NotFoundException(Indicator.class.getSimpleName());
+            }
+            penilaianKinerja.setNamaIndikator(indicator.getName());
+            penilaianKinerjaList.add(penilaianKinerja);
+        }
         baseResponse.setStatus(true);
         baseResponse.setCode(HttpStatus.OK.value());
-        baseResponse.setPayload(penilaianKinerjaIterable);
+        baseResponse.setPayload(penilaianKinerjaList);
 
         return ResponseEntity.ok(baseResponse);
     }
@@ -100,7 +115,7 @@ public class PenilaianController {
         List<PenilaianKinerja> penilaianKinerjaUpdateList = new ArrayList<>();
         for (PenilaianKinerja penilaianKinerja : penilaianKinerjaList) {
             PenilaianKinerja penilaianKinerjaUpdate = penilaianRepository.findOne(penilaianKinerja.penilaianIdentity);
-            penilaianKinerjaUpdate.setNilai(penilaianKinerja.getNilai());
+            penilaianKinerjaUpdate.setIdIndicator();
             penilaianKinerjaUpdateList.add(penilaianKinerjaUpdate);
         }
         penilaianRepository.save(penilaianKinerjaUpdateList);

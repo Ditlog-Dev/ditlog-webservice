@@ -1,5 +1,6 @@
 package id.ac.itb.logistik.ditlog.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -11,30 +12,30 @@ import java.util.Date;
 @Table(name = "PENILAIAN_KINERJA")
 public class PenilaianKinerja implements Serializable{
 
-//    @Id
-//    @Column(name = "ROWID")
-//    public String id;
-
+    @JsonIgnore
     @EmbeddedId
     public PenilaianIdentity penilaianIdentity;
 
-//    @Column(name = "ID_KONTRAK")
-//    private Long idKontrak = 0L;
-//
-//    @Column(name = "ID_INDIKATOR")
-//    private Long idIndikator = 0L;
+    @Transient
+    private Long idIndicator;
 
     @Column(name = "NILAI")
     private BigDecimal nilai = BigDecimal.ZERO;
 
+    @JsonIgnore
     @Column(name = "TGL_BUAT")
     private Date dateCreated = new Date();
 
+    @JsonIgnore
     @Column(name = "TGL_UPDATE")
     private Date dateUpdated = new Date();
 
+    @JsonIgnore
     @Column(name = "ID_USER")
     private Long idUser;
+
+    @Transient
+    private String namaIndikator;
 
     public PenilaianKinerja() {
     }
@@ -43,27 +44,21 @@ public class PenilaianKinerja implements Serializable{
         this.penilaianIdentity = penilaianIdentity;
     }
 
-    //    public PenilaianKinerja(Long idKontrak, Long idIndikator, BigDecimal nilai) {
-//        this.idKontrak = idKontrak;
-//        this.idIndikator = idIndikator;
-//        this.nilai = nilai;
-//    }
-//
-//    public Long getIdKontrak() {
-//        return idKontrak;
-//    }
-//
-//    public void setIdKontrak(Long idKontrak) {
-//        this.idKontrak = idKontrak;
-//    }
-//
-//    public Long getIdIndikator() {
-//        return idIndikator;
-//    }
-//
-//    public void setIdIndikator(Long idIndikator) {
-//        this.idIndikator = idIndikator;
-//    }
+    public PenilaianKinerja(PenilaianIdentity penilaianIdentity, Long idIndicator) {
+        this.penilaianIdentity = penilaianIdentity;
+        this.idIndicator = idIndicator;
+    }
+
+    public Long getIdIndicator() {
+        return idIndicator;
+    }
+
+    public void setIdIndicator(Long idIndicator) {
+        this.idIndicator = idIndicator;
+    }
+    public void setIdIndicator() {
+        this.idIndicator = penilaianIdentity.getIdIndikator();
+    }
 
     public BigDecimal getNilai() {
         return nilai;
@@ -95,5 +90,13 @@ public class PenilaianKinerja implements Serializable{
 
     public void setIdUser(Long idUser) {
         this.idUser = idUser;
+    }
+
+    public String getNamaIndikator() {
+        return namaIndikator;
+    }
+
+    public void setNamaIndikator(String namaIndikator) {
+        this.namaIndikator = namaIndikator;
     }
 }

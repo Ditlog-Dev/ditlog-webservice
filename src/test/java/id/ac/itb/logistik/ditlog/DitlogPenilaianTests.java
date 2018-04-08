@@ -6,6 +6,7 @@ import id.ac.itb.logistik.ditlog.repository.IndicatorRepository;
 import id.ac.itb.logistik.ditlog.repository.PenilaianRepository;
 import id.ac.itb.logistik.ditlog.repository.SPMKContractRepository;
 import id.ac.itb.logistik.ditlog.service.TokenAuthenticationService;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Assert;
@@ -20,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -115,6 +117,5 @@ public class DitlogPenilaianTests extends BaseTest{
         // Assertion
         Assert.assertEquals(HttpStatus.OK.value(), response.getStatusCodeValue());
         Assert.assertEquals(2,result.getJSONArray("payload").length());
-//        JSONAssert.assertEquals(jsonIndicator2, result.getJSONObject("payload"), false);
     }
 }
