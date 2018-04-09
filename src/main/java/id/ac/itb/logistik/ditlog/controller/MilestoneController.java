@@ -1,30 +1,23 @@
 package id.ac.itb.logistik.ditlog.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import id.ac.itb.logistik.ditlog.model.Milestone;
 import id.ac.itb.logistik.ditlog.model.*;
 import id.ac.itb.logistik.ditlog.repository.MilestoneRepository;
-import id.ac.itb.logistik.ditlog.repository.SPMKContractRepository;
 import id.ac.itb.logistik.ditlog.repository.TugasPemeriksaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.naming.AuthenticationException;
-import javax.persistence.Entity;
-import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.Null;
 import java.util.*;
-import java.util.regex.Pattern;
 
 @RestController
 public class MilestoneController {
     @Autowired
     MilestoneRepository milestoneRepo;
-    @Autowired
-    SPMKContractRepository spmkRepo;
     @Autowired
     TugasPemeriksaRepository pemeriksaRepo;
 
@@ -112,15 +105,14 @@ public class MilestoneController {
 
     @RequestMapping(value = "/rencana/{idSpmk}", method = RequestMethod.POST)
     public ResponseEntity<BaseResponse> insert(HttpServletRequest request,
-                                               @RequestBody Milestone[] listOfRencana,
+                                               @RequestBody List<Milestone> listOfRencana,
                                                @PathVariable("idSpmk") Long idSpmk) throws Exception {
         BaseResponse baseResponse = new BaseResponse();
         User user = (User) request.getAttribute("user");
 
         //validate input
         for (Milestone rencana : listOfRencana) {
-            if (rencana.getStatusRencana() != null ||
-                    rencana.getStatusRealisasi() != null) {
+            if (rencana.getStatusRealisasi() != null) {
                 throw new Exception("Wrong input rencana");
             }
         }
