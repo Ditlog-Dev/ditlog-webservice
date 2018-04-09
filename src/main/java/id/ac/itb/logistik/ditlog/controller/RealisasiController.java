@@ -29,7 +29,7 @@ public class RealisasiController {
     @GetMapping("/realisasi/{idSpmk}")
     public ResponseEntity<BaseResponse> getByIdSpmk(HttpServletRequest request,
                                                     @PathVariable("idSpmk") Long idSpmk
-    ) {
+    ) throws AuthenticationException {
         BaseResponse baseResponse = new BaseResponse();
         User user = (User) request.getAttribute("user");
         ArrayList<Milestone> results = new ArrayList<Milestone>();
@@ -37,20 +37,20 @@ public class RealisasiController {
             @Override
             public Iterator<Milestone> iterator() { return null; }
         };
-
         if (ROLE.get(user.getIdResponsibility()).equals("PEMERIKSA_JASA")
                 || ROLE.get(user.getIdResponsibility()).equals("VENDOR")) {
 
             resultsMilestone = realisasiRepository.findByIdSPMK(idSpmk);
 
             for (Milestone resultMilestone : resultsMilestone) {
-                if (resultMilestone.getStatusRencana().equals("1") &&
-                        resultMilestone.getStatusRealisasi() == null)
-                    results.add(resultMilestone);
+                results.add(resultMilestone);
             }
             baseResponse.setStatus(true);
             baseResponse.setCode(HttpStatus.OK.value());
             baseResponse.setPayload(results);
+        }
+        else {
+            throw new AuthenticationException("Unauthorized Access");
         }
 
         return ResponseEntity.ok(baseResponse);
@@ -67,7 +67,7 @@ public class RealisasiController {
         for (Milestone rencana : listOfRealisasi) {
             if (!rencana.getStatusRencana().equals("1")
                   ||  rencana.getStatusRealisasi() != null) {
-                throw new Exception("Wrong input rencana");
+                throw new Exception("Wrong input realisasi");
             }
         }
 
