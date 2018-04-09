@@ -109,6 +109,14 @@ public class User {
     this.namaUser = namaUser;
   }
 
+  public Long getIdUsulanUser() {
+    return idUsulanUser;
+  }
+
+  public void setIdUsulanUser(Long idUsulanUser) {
+    this.idUsulanUser = idUsulanUser;
+  }
+
   @Override
   public String toString() {
     return "User{" +
