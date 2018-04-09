@@ -10,12 +10,6 @@ import java.sql.Date;
 @Entity
 @Table(name = "SILOG_USER")
 public class User {
-  @Column(name = "ID_SUSULAN_USER")
-  private Long idSusulanUser;
-
-  @Column(name = "STATUS")
-  private char status;
-
   @Id
   @GeneratedValue
   @Column(name = "ID_USER")
@@ -29,18 +23,6 @@ public class User {
 
   @Column(name = "ID_EMPLOYEES")
   private Long idEmployee;
-
-  @Column(name = "EMAIL")
-  private String email;
-
-  @Column(name = "USER_ID_ORACE")
-  private String userIdOracle;
-
-  @Column(name = "TGL_CREATE")
-  private Date tanggalCreate;
-
-  @Column(name = "TGL_UPDATE")
-  private Date tanggalUpdate;
 
   @Column(name = "ID_RESPONSIBILITY")
   private Long idResponsibility;
@@ -62,21 +44,6 @@ public class User {
     this.idResponsibility = idResponsibility;
   }
 
-  public Long getIdSusulanUser() {
-    return idSusulanUser;
-  }
-
-  public void setIdSusulanUser(Long idSusulanUser) {
-    this.idSusulanUser = idSusulanUser;
-  }
-
-  public char getStatus() {
-    return status;
-  }
-
-  public void setStatus(char status) {
-    this.status = status;
-  }
 
   public Long getIdUser() {
     return idUser;
@@ -108,38 +75,6 @@ public class User {
 
   public void setIdEmployee(Long idEmployee) {
     this.idEmployee = idEmployee;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public String getUserIdOracle() {
-    return userIdOracle;
-  }
-
-  public void setUserIdOracle(String userIdOracle) {
-    this.userIdOracle = userIdOracle;
-  }
-
-  public Date getTanggalCreate() {
-    return tanggalCreate;
-  }
-
-  public void setTanggalCreate(Date tanggalCreate) {
-    this.tanggalCreate = tanggalCreate;
-  }
-
-  public Date getTanggalUpdate() {
-    return tanggalUpdate;
-  }
-
-  public void setTanggalUpdate(Date tanggalUpdate) {
-    this.tanggalUpdate = tanggalUpdate;
   }
 
   public Long getIdResponsibility() {
@@ -177,16 +112,10 @@ public class User {
   @Override
   public String toString() {
     return "User{" +
-            "idSusulanUser=" + idSusulanUser +
-            ", status=" + status +
             ", idUser=" + idUser +
             ", username='" + username + '\'' +
             ", password='" + password + '\'' +
             ", idEmployee=" + idEmployee +
-            ", email='" + email + '\'' +
-            ", userIdOracle='" + userIdOracle + '\'' +
-            ", tanggalCreate=" + tanggalCreate +
-            ", tanggalUpdate=" + tanggalUpdate +
             ", idResponsibility=" + idResponsibility +
             ", idUnit=" + idUnit +
             ", vendorId=" + vendorId +

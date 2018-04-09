@@ -28,7 +28,7 @@ public class DitlogApplication {
   }
 
   public static void main(String[] args) {
-    TimeZone timeZone = TimeZone.getTimeZone("America/Los_Angeles"); // e.g. "Europe/Rome"
+    TimeZone timeZone = TimeZone.getTimeZone("GMT+0:00"); // e.g. "Europe/Rome"
     TimeZone.setDefault(timeZone);
 
     SpringApplication.run(DitlogApplication.class, args);
