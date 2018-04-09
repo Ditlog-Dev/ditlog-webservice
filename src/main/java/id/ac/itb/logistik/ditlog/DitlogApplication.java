@@ -18,7 +18,8 @@ public class DitlogApplication {
 	public FilterRegistrationBean jwtFilter() {
 		final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
 		registrationBean.setFilter(new JwtFilter());
-        registrationBean.addUrlPatterns("/indicators","/contracts","/rencana/*");
+        registrationBean.addUrlPatterns("/indicators","/contracts",
+                "/rencana/*", "/realisasi/*");
 		return registrationBean;
 	}
 
