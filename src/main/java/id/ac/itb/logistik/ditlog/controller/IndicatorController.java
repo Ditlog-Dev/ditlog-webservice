@@ -4,6 +4,7 @@ import id.ac.itb.logistik.ditlog.model.BaseResponse;
 import id.ac.itb.logistik.ditlog.model.Indicator;
 import id.ac.itb.logistik.ditlog.repository.IndicatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -30,18 +31,18 @@ public class IndicatorController {
       @RequestParam(value = "sort", defaultValue = "id") String sort,
       @RequestParam(value = "dir", defaultValue = "asc") String direction) {
     BaseResponse baseResponse = new BaseResponse();
-    Iterable<Indicator> result = indicatorRepository.findAll(
+    Page<Indicator> result = indicatorRepository.findAll(
                     new PageRequest(
                             Integer.parseInt(page),
                             Integer.parseInt(limit),
                             direction.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC,
                             sort));
-    if(result.spliterator().getExactSizeIfKnown() == 0){
+    if(result.getContent().isEmpty()){
       throw new EntityNotFoundException(Indicator.class.getSimpleName());
     }
     baseResponse.setStatus(true);
     baseResponse.setCode(HttpStatus.OK.value());
-    baseResponse.setPayload(result);
+    baseResponse.setPayload(result.getContent());
     return ResponseEntity.ok(baseResponse);
   }
 

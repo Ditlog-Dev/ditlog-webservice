@@ -17,6 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 @RunWith(SpringRunner.class)
@@ -41,16 +45,31 @@ public class DitlogContractTests extends BaseTest {
         if (setUpIsDone) {
             return;
         }
+        String dateString;
+        Date date = new Date();
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         contractBarang = new SPMKContract();
         contractBarang.setIdKontrak(1L);
         contractBarang.setNoKontrak("1234");
-        contractBarang.setTahun(2018L);
+        dateString = "2018-09-09";
+        try {
+            date = formatter.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        contractBarang.setTanggalKontrak(date);
         contractBarang.setJenis("BARANG");
         contractRepository.save(contractBarang);
         contractJasa = new SPMKContract();
         contractJasa.setIdKontrak(2L);
         contractJasa.setNoKontrak("1234");
-        contractJasa.setTahun(2017L);
+        dateString = "2017-09-09";
+        try {
+            date = formatter.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        contractJasa.setTanggalKontrak(date);
         contractJasa.setJenis("JASA");
         contractRepository.save(contractJasa);
         jsonContractBarang = mapper.writeValueAsString(contractBarang);
@@ -61,6 +80,12 @@ public class DitlogContractTests extends BaseTest {
         userKasieBarang = new User("john kasie barang", RoleConstant.KASIE_PEMERIKSA_BARANG);
         userJasa = new User("john jasa", RoleConstant.PEMERIKSA_JASA);
         userKasieJasa = new User("john kasie jasa", RoleConstant.KASIE_PEMERIKSA_JASA);
+        userRepo.save(userVendor);
+        userRepo.save(userKasubdit);
+        userRepo.save(userBarang);
+        userRepo.save(userKasieBarang);
+        userRepo.save(userJasa);
+        userRepo.save(userKasieJasa);
         setUpIsDone = true;
     }
 

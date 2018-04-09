@@ -41,6 +41,7 @@ public class DitlogIndicatorTests extends BaseTest {
     testIndicator2.setName("test indicator 2");
     jsonIndicator2 = mapper.writeValueAsString(testIndicator2);
     testUser = new User("john",422L);
+    userRepo.save(testUser);
     bearerAuth = TokenAuthenticationService.TOKEN_PREFIX + " " + TokenAuthenticationService.getJWT(testUser);
     setUpIsDone = true;
   }
@@ -79,7 +80,7 @@ public class DitlogIndicatorTests extends BaseTest {
     Assert.assertEquals(HttpStatus.OK.value(), response.getStatusCodeValue());
     JSONAssert.assertEquals(
             jsonIndicator,
-            result.getJSONObject("payload").getJSONArray("content").getJSONObject(0),
+            result.getJSONArray("payload").getJSONObject(0),
             false);
   }
   @Test

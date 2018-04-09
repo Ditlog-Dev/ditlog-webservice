@@ -3,12 +3,12 @@ package id.ac.itb.logistik.ditlog.model;
 public class UserPayload {
 
   public Long idUser;
-  public Long roleId;
+  public Long idResponsibility;
   public String jwtToken;
 
-  public UserPayload(Long idUser, Long roleId, String jwtToken) {
+  public UserPayload(Long idUser, Long idResponsibility, String jwtToken) {
     this.idUser = idUser;
-    this.roleId = roleId;
+    this.idResponsibility = idResponsibility;
     this.jwtToken = jwtToken;
   }
 }
