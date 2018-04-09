@@ -70,7 +70,7 @@ public class PenilaianController {
             HttpServletRequest request,
             @PathVariable("id") Long id,
             @RequestBody ArrayList<Long> indicatorIdList
-    ) throws NotFoundException {
+    ){
         BaseResponse baseResponse = new BaseResponse();
         User user = (User) request.getAttribute("user");
         Long roleId = user.getIdResponsibility();
@@ -82,24 +82,33 @@ public class PenilaianController {
             throw new EntityNotFoundException(SPMKContract.class.getSimpleName());
         }
         List<PenilaianKinerja> penilaianKinerjaList = new ArrayList<>();
+        String msg = "Some indicators has been added before. These id are : ";
+        String msg2 = "Some indicators may not exist. These id are : ";
+        boolean msg_flag = false, msg2_flag = false;
         for (Long indicatorId:indicatorIdList) {
-            PenilaianKinerja penilaianKinerja = new PenilaianKinerja(new PenilaianIdentity(id,indicatorId));
-            penilaianKinerjaList.add(penilaianKinerja);
-        }
-        Iterable<PenilaianKinerja> penilaianKinerjaIterable = penilaianRepository.save(penilaianKinerjaList);
-
-        penilaianKinerjaList = new ArrayList<>();
-        for(PenilaianKinerja penilaianKinerja:penilaianKinerjaIterable) {
-            penilaianKinerja.setIdIndicator();
-            Indicator indicator = indicatorRepository.findOne(penilaianKinerja.penilaianIdentity.getIdIndikator());
-            if(indicator == null){
-                throw new NotFoundException(Indicator.class.getSimpleName());
+            PenilaianKinerja penilaianKinerja = penilaianRepository.findOne(new PenilaianIdentity(id, indicatorId));
+            boolean isExist = penilaianKinerja != null;
+            if (isExist) {
+                msg_flag = true;
+                msg += indicatorId.toString() + " ";
             }
+            penilaianKinerja = new PenilaianKinerja(new PenilaianIdentity(id, indicatorId));
+            Indicator indicator = indicatorRepository.findOne(penilaianKinerja.penilaianIdentity.getIdIndikator());
+            if (indicator == null) {
+                msg2_flag = true;
+                msg2 += indicatorId.toString() + " ";
+            }
+            if (isExist) continue;
             penilaianKinerja.setNamaIndikator(indicator.getName());
             penilaianKinerjaList.add(penilaianKinerja);
+            penilaianRepository.save(penilaianKinerja);
         }
         baseResponse.setStatus(true);
         baseResponse.setCode(HttpStatus.OK.value());
+        String msg_final = "";
+        if(msg_flag) msg_final += msg;
+        if(msg2_flag) msg_final += ". " + msg2;
+        if(msg_flag || msg2_flag) baseResponse.setMessage(msg_final);
         baseResponse.setPayload(penilaianKinerjaList);
 
         return ResponseEntity.ok(baseResponse);

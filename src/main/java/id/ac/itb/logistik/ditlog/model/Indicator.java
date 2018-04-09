@@ -30,6 +30,18 @@ public class Indicator {
   @Column(name = "ID_USER")
   private Long idUser;
 
+  public Indicator() {
+  }
+
+  public Indicator(Long id) {
+    this.id = id;
+  }
+
+  public Indicator(Long id, String name) {
+    this.id = id;
+    this.name = name;
+  }
+
   public Long getId() {
     return id;
   }

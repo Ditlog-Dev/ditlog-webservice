@@ -42,11 +42,7 @@ public class PenilaianKinerja implements Serializable{
 
     public PenilaianKinerja(PenilaianIdentity penilaianIdentity) {
         this.penilaianIdentity = penilaianIdentity;
-    }
-
-    public PenilaianKinerja(PenilaianIdentity penilaianIdentity, Long idIndicator) {
-        this.penilaianIdentity = penilaianIdentity;
-        this.idIndicator = idIndicator;
+        setIdIndicator();
     }
 
     public Long getIdIndicator() {

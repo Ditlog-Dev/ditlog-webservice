@@ -9,6 +9,10 @@ public class PenilaianSimplified {
     public PenilaianSimplified() {
     }
 
+    public PenilaianSimplified(Long idIndikator) {
+        this.idIndikator = idIndikator;
+    }
+
     public Long getIdIndikator() {
         return idIndikator;
     }
