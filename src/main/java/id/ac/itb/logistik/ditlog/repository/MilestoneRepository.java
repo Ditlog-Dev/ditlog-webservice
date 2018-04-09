@@ -23,10 +23,11 @@ public interface MilestoneRepository extends PagingAndSortingRepository<Mileston
     @Query(value = "SELECT * FROM PROGRES_JASA WHERE ID_SPMK = ?1", nativeQuery = true)
     Iterable<Milestone> findByIdSPMK(Long idSPMK);
 
+    @Query(value = "SELECT MAX(ID_PROGRES) FROM PROGRES_JASA", nativeQuery = true)
+    Long findHighestID();
+
     @Transactional
     @Modifying
     @Query(value = "UPDATE PROGRES_JASA SET STATUS_RENCANA = ?2 WHERE ID_PROGRES = ?1", nativeQuery = true)
     void updateById(Long idProgres, String status);
-
-
 }

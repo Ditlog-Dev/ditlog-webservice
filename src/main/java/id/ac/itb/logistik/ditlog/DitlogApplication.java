@@ -18,7 +18,8 @@ public class DitlogApplication {
 	public FilterRegistrationBean jwtFilter() {
 		final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
 		registrationBean.setFilter(new JwtFilter());
-        registrationBean.addUrlPatterns("/indicators","/contracts","/rencana/*");
+        registrationBean.addUrlPatterns("/indicators","/contracts",
+                "/rencana/*", "/realisasi/*");
 		return registrationBean;
 	}
 
@@ -28,7 +29,7 @@ public class DitlogApplication {
   }
 
   public static void main(String[] args) {
-    TimeZone timeZone = TimeZone.getTimeZone("America/Los_Angeles"); // e.g. "Europe/Rome"
+    TimeZone timeZone = TimeZone.getTimeZone("GMT+0:00"); // e.g. "Europe/Rome"
     TimeZone.setDefault(timeZone);
 
     SpringApplication.run(DitlogApplication.class, args);
