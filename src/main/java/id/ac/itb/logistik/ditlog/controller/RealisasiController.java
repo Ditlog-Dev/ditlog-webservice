@@ -29,26 +29,25 @@ public class RealisasiController {
         BaseResponse baseResponse = new BaseResponse();
         User user = (User) request.getAttribute("user");
         ArrayList<Milestone> results = new ArrayList<Milestone>();
-        //System.out.println(user);
         Iterable<Milestone> resultsMilestone = new Iterable<Milestone>() {
             @Override
             public Iterator<Milestone> iterator() { return null; }
         };
-        resultsMilestone = realisasiRepository.findByIdSPMK(idSpmk);
 
-        for (Milestone resultMilestone : resultsMilestone) {
-            if (resultMilestone.getStatusRencana() == null &&
-                    resultMilestone.getStatusRealisasi() == null)
-                results.add(resultMilestone);
+        if (ROLE.get(user.getIdResponsibility()).equals("PEMERIKSA_JASA")
+                || ROLE.get(user.getIdResponsibility()).equals("VENDOR")) {
+
+            resultsMilestone = realisasiRepository.findByIdSPMK(idSpmk);
+
+            for (Milestone resultMilestone : resultsMilestone) {
+                if (resultMilestone.getStatusRencana().equals("1") &&
+                        resultMilestone.getStatusRealisasi() == null)
+                    results.add(resultMilestone);
+            }
+            baseResponse.setStatus(true);
+            baseResponse.setCode(HttpStatus.OK.value());
+            baseResponse.setPayload(results);
         }
-
-        if(results.spliterator().getExactSizeIfKnown() == 0){
-            throw new EntityNotFoundException(Milestone.class.getSimpleName());
-        }
-
-        baseResponse.setStatus(true);
-        baseResponse.setCode(HttpStatus.OK.value());
-        baseResponse.setPayload(results);
 
         return ResponseEntity.ok(baseResponse);
     }
